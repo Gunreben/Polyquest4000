@@ -1,0 +1,180 @@
+{
+  "Polytron4000": {
+    "initial": {
+      "text": "The mighty Polytron 4000 stands before you, humming with potential energy. It needs the Hyperraumantrieb to activate!",
+      "choices": [
+        {
+          "text": "Insert Hyperraumantrieb",
+          "condition": "hasHyperraumantrieb",
+          "action": "win_game"
+        },
+        {
+          "text": "Not ready yet",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "Brausecus": {
+    "initial": {
+      "text": "Welcome to Brausecus! The finest beverages in the festival. What can I get you?",
+      "choices": [
+        {
+          "text": "I need coffee for energy",
+          "condition": "hasPaper",
+          "action": "give_coffee"
+        },
+        {
+          "text": "Just browsing",
+          "action": "close"
+        }
+      ]
+    },
+    "after_coffee": {
+      "text": "Enjoy your coffee! You look much more energetic now.",
+      "choices": [
+        {
+          "text": "Thanks!",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "Resonant": {
+    "initial": {
+      "text": "Resonant - where sound becomes art. The frequencies here are perfectly tuned.",
+      "choices": [
+        {
+          "text": "Can you help with the Polytron?",
+          "condition": "hasCoffee",
+          "action": "give_soundmodule"
+        },
+        {
+          "text": "Just listening",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "Vacanza": {
+    "initial": {
+      "text": "Vacanza - your relaxation destination. Take a break from the festival chaos.",
+      "choices": [
+        {
+          "text": "I need to recharge",
+          "action": "give_energy"
+        },
+        {
+          "text": "Maybe later",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "Looserlounge": {
+    "initial": {
+      "text": "Welcome to the Looserlounge! Where the cool kids hang out and share secrets.",
+      "choices": [
+        {
+          "text": "What's the word on the street?",
+          "action": "give_info"
+        },
+        {
+          "text": "Just passing through",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "L300": {
+    "initial": {
+      "text": "L300 - Technical equipment and electronic components. Need something specific?",
+      "choices": [
+        {
+          "text": "Looking for Hyperraumantrieb parts",
+          "condition": "hasSoundmodule",
+          "action": "give_hyperraumantrieb"
+        },
+        {
+          "text": "Just checking inventory",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "Orgia": {
+    "initial": {
+      "text": "Orgia - The wildest party spot at the festival! The energy here is infectious.",
+      "choices": [
+        {
+          "text": "Join the party",
+          "action": "give_party_energy"
+        },
+        {
+          "text": "Too intense for me",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "Lila Drache": {
+    "initial": {
+      "text": "The mysterious Lila Drache... Ancient wisdom flows through this purple dragon.",
+      "choices": [
+        {
+          "text": "Seek wisdom",
+          "action": "give_wisdom"
+        },
+        {
+          "text": "Not ready for mysteries",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "Nest": {
+    "initial": {
+      "text": "The Nest - A cozy hideaway where festival-goers share stories and resources.",
+      "choices": [
+        {
+          "text": "Share stories",
+          "action": "give_paper"
+        },
+        {
+          "text": "Keep to myself",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "Workshopspace": {
+    "initial": {
+      "text": "Workshopspace - Learn, create, and collaborate. Knowledge is power here.",
+      "choices": [
+        {
+          "text": "Learn something new",
+          "action": "give_knowledge"
+        },
+        {
+          "text": "Not in learning mood",
+          "action": "close"
+        }
+      ]
+    }
+  },
+  "2. Reihe": {
+    "initial": {
+      "text": "Second Row seating - Perfect view of the main stage. Great for observing the festival.",
+      "choices": [
+        {
+          "text": "Watch the show",
+          "action": "give_inspiration"
+        },
+        {
+          "text": "Keep moving",
+          "action": "close"
+        }
+      ]
+    }
+  }
+} 

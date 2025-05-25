@@ -1,0 +1,216 @@
+2025-05-25 15:46:39,808 - __main__ - INFO - Starting Poly Hypertron Quest 4004...
+2025-05-25 15:46:39,809 - __main__ - INFO - Game initialized successfully
+2025-05-25 15:46:39,810 - __main__ - INFO - Controls: Touch Kaossilator Pro touchpad to move
+2025-05-25 15:46:39,811 - __main__ - INFO - Press 'q' or ESC to quit, 'r' to reset
+2025-05-25 15:46:39,811 - poly_quest.core.game_engine - INFO - Initializing game engine...
+2025-05-25 15:46:39,873 - poly_quest.core.midi_input - INFO - Auto-connected to: KAOSSILATOR PRO 1 PAD 0
+2025-05-25 15:46:39,873 - poly_quest.core.midi_input - INFO - MIDI input handler started
+2025-05-25 15:46:39,873 - poly_quest.core.game_engine - INFO - Game engine initialized successfully
+2025-05-25 15:46:39,874 - poly_quest.core.game_engine - INFO - Game engine started
+2025-05-25 15:46:39,931 - __main__ - ERROR - Game error: 'GameMapWidget' object has no attribute 'rows'
+Traceback (most recent call last):
+  File "C:\Users\logun\OneDrive\Dokumente\Polyquest4000\poly_quest\main.py", line 58, in main
+    ui.start()
+  File "C:\Users\logun\OneDrive\Dokumente\Polyquest4000\poly_quest\ui\terminal_ui.py", line 172, in start
+    self.loop.run()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\main_loop.py", line 339, in run
+    self._run()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\main_loop.py", line 441, in _run
+    self.event_loop.run()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\select_loop.py", line 182, in run
+    self._loop()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\select_loop.py", line 224, in _loop
+    alarm_callback()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\main_loop.py", line 645, in entering_idle
+    self.draw_screen()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\main_loop.py", line 662, in draw_screen
+    canvas = self._topmost_widget.render(self.screen_size, focus=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 112, in cached_render
+    canv = fn(self, size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\popup.py", line 130, in render
+    self._update_overlay(size, focus)
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\popup.py", line 99, in _update_overlay
+    canv = self._original_widget.render(size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 112, in cached_render
+    canv = fn(self, size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\filler.py", line 240, in render
+    top, bottom = self.filler_values(size, focus)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\filler.py", line 210, in filler_values
+    height = self._original_widget.rows((maxcol,), focus=focus)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 181, in cached_rows
+    return fn(self, size, focus)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\padding.py", line 400, in rows
+    return self._original_widget.rows((maxcol - left - right,), focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 181, in cached_rows
+    return fn(self, size, focus)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\pile.py", line 932, in rows
+    return sum(self.get_rows_sizes(size, focus)[1])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\pile.py", line 764, in get_rows_sizes
+    return self._get_flow_rows_sizes(size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\pile.py", line 750, in _get_flow_rows_sizes
+    heights.append(w.rows((maxcol,), focus=focused))
+                   ^^^^^^
+AttributeError: 'GameMapWidget' object has no attribute 'rows'
+2025-05-25 15:46:39,942 - poly_quest.core.midi_input - INFO - MIDI input handler stopped
+2025-05-25 15:46:39,943 - poly_quest.core.game_engine - INFO - Game engine stopped
+2025-05-25 15:46:39,943 - __main__ - INFO - Game stopped
+2025-05-25 15:47:34,788 - __main__ - INFO - Starting Poly Hypertron Quest 4004...
+2025-05-25 15:47:34,790 - __main__ - INFO - Game initialized successfully
+2025-05-25 15:47:34,790 - __main__ - INFO - Controls: Touch Kaossilator Pro touchpad to move
+2025-05-25 15:47:34,791 - __main__ - INFO - Press 'q' or ESC to quit, 'r' to reset
+2025-05-25 15:47:34,791 - poly_quest.core.game_engine - INFO - Initializing game engine...
+2025-05-25 15:47:34,843 - poly_quest.core.midi_input - INFO - Auto-connected to: KAOSSILATOR PRO 1 PAD 0
+2025-05-25 15:47:34,845 - poly_quest.core.midi_input - INFO - MIDI input handler started
+2025-05-25 15:47:34,845 - poly_quest.core.game_engine - INFO - Game engine initialized successfully
+2025-05-25 15:47:34,845 - poly_quest.core.game_engine - INFO - Game engine started
+2025-05-25 15:47:34,892 - __main__ - ERROR - Game error: too many values to unpack (expected 1)
+Traceback (most recent call last):
+  File "C:\Users\logun\OneDrive\Dokumente\Polyquest4000\poly_quest\main.py", line 58, in main
+    ui.start()
+  File "C:\Users\logun\OneDrive\Dokumente\Polyquest4000\poly_quest\ui\terminal_ui.py", line 176, in start
+    self.loop.run()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\main_loop.py", line 339, in run
+    self._run()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\main_loop.py", line 441, in _run
+    self.event_loop.run()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\select_loop.py", line 182, in run
+    self._loop()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\select_loop.py", line 224, in _loop
+    alarm_callback()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\main_loop.py", line 645, in entering_idle
+    self.draw_screen()
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\event_loop\main_loop.py", line 662, in draw_screen
+    canvas = self._topmost_widget.render(self.screen_size, focus=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 112, in cached_render
+    canv = fn(self, size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\popup.py", line 130, in render
+    self._update_overlay(size, focus)
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\popup.py", line 99, in _update_overlay
+    canv = self._original_widget.render(size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 112, in cached_render
+    canv = fn(self, size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\filler.py", line 243, in render
+    canv = self._original_widget.render((maxcol,), focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 112, in cached_render
+    canv = fn(self, size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\padding.py", line 306, in render
+    canv = self._original_widget.render((maxcol, *size[1:]), focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 112, in cached_render
+    canv = fn(self, size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\pile.py", line 898, in render
+    canv = w.render(w_size, focus=focus and item_focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 112, in cached_render
+    canv = fn(self, size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\OneDrive\Dokumente\Polyquest4000\poly_quest\ui\terminal_ui.py", line 76, in render
+    return pile.render((cols, self.map_height), focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 112, in cached_render
+    canv = fn(self, size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\pile.py", line 898, in render
+    canv = w.render(w_size, focus=focus and item_focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\widget.py", line 112, in cached_render
+    canv = fn(self, size, focus=focus)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\logun\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\urwid\widget\text.py", line 267, in render
+    (maxcol,) = size
+    ^^^^^^^^^
+ValueError: too many values to unpack (expected 1)
+2025-05-25 15:47:34,906 - poly_quest.core.midi_input - INFO - MIDI input handler stopped
+2025-05-25 15:47:34,907 - poly_quest.core.game_engine - INFO - Game engine stopped
+2025-05-25 15:47:34,908 - __main__ - INFO - Game stopped
+2025-05-25 15:48:46,389 - __main__ - INFO - Starting Poly Hypertron Quest 4004...
+2025-05-25 15:48:46,390 - __main__ - INFO - Game initialized successfully
+2025-05-25 15:48:46,390 - __main__ - INFO - Controls: Touch Kaossilator Pro touchpad to move
+2025-05-25 15:48:46,391 - __main__ - INFO - Press 'q' or ESC to quit, 'r' to reset
+2025-05-25 15:48:46,392 - poly_quest.core.game_engine - INFO - Initializing game engine...
+2025-05-25 15:48:46,473 - poly_quest.core.midi_input - INFO - Auto-connected to: KAOSSILATOR PRO 1 PAD 0
+2025-05-25 15:48:46,475 - poly_quest.core.midi_input - INFO - MIDI input handler started
+2025-05-25 15:48:46,475 - poly_quest.core.game_engine - INFO - Game engine initialized successfully
+2025-05-25 15:48:46,475 - poly_quest.core.game_engine - INFO - Game engine started
+2025-05-25 15:50:19,219 - poly_quest.core.midi_input - INFO - MIDI input handler stopped
+2025-05-25 15:50:19,220 - poly_quest.core.game_engine - INFO - Game engine stopped
+2025-05-25 15:50:19,220 - __main__ - INFO - Game stopped
+2025-05-25 15:50:43,135 - __main__ - INFO - Starting Poly Hypertron Quest 4004...
+2025-05-25 15:50:43,136 - __main__ - INFO - Game initialized successfully
+2025-05-25 15:50:43,136 - __main__ - INFO - Controls: Touch Kaossilator Pro touchpad to move
+2025-05-25 15:50:43,136 - __main__ - INFO - Press 'q' or ESC to quit, 'r' to reset
+2025-05-25 15:50:43,136 - poly_quest.core.game_engine - INFO - Initializing game engine...
+2025-05-25 15:50:43,176 - poly_quest.core.midi_input - INFO - Auto-connected to: KAOSSILATOR PRO 1 PAD 0
+2025-05-25 15:50:43,178 - poly_quest.core.midi_input - INFO - MIDI input handler started
+2025-05-25 15:50:43,178 - poly_quest.core.game_engine - INFO - Game engine initialized successfully
+2025-05-25 15:50:43,178 - poly_quest.core.game_engine - INFO - Game engine started
+2025-05-25 15:51:09,624 - __main__ - INFO - Game interrupted by user
+2025-05-25 15:51:09,631 - poly_quest.core.midi_input - INFO - MIDI input handler stopped
+2025-05-25 15:51:09,631 - poly_quest.core.game_engine - INFO - Game engine stopped
+2025-05-25 15:51:09,632 - __main__ - INFO - Game stopped
+2025-05-25 15:51:21,162 - __main__ - INFO - Starting Poly Hypertron Quest 4004...
+2025-05-25 15:51:21,163 - __main__ - INFO - Game initialized successfully
+2025-05-25 15:51:21,163 - __main__ - INFO - Controls: Touch Kaossilator Pro touchpad to move
+2025-05-25 15:51:21,163 - __main__ - INFO - Press 'q' or ESC to quit, 'r' to reset
+2025-05-25 15:51:21,164 - poly_quest.core.game_engine - INFO - Initializing game engine...
+2025-05-25 15:51:21,200 - poly_quest.core.midi_input - INFO - Auto-connected to: KAOSSILATOR PRO 1 PAD 0
+2025-05-25 15:51:21,201 - poly_quest.core.midi_input - INFO - MIDI input handler started
+2025-05-25 15:51:21,201 - poly_quest.core.game_engine - INFO - Game engine initialized successfully
+2025-05-25 15:51:21,201 - poly_quest.core.game_engine - INFO - Game engine started
+2025-05-25 15:51:48,084 - __main__ - INFO - Game interrupted by user
+2025-05-25 15:51:48,090 - poly_quest.core.midi_input - INFO - MIDI input handler stopped
+2025-05-25 15:51:48,091 - poly_quest.core.game_engine - INFO - Game engine stopped
+2025-05-25 15:51:48,091 - __main__ - INFO - Game stopped
+2025-05-25 15:52:30,971 - __main__ - INFO - Starting Poly Hypertron Quest 4004...
+2025-05-25 15:52:30,973 - __main__ - INFO - Game initialized successfully
+2025-05-25 15:52:30,973 - __main__ - INFO - Controls: Touch Kaossilator Pro touchpad to move
+2025-05-25 15:52:30,973 - __main__ - INFO - Press 'q' or ESC to quit, 'r' to reset
+2025-05-25 15:52:30,973 - poly_quest.core.game_engine - INFO - Initializing game engine...
+2025-05-25 15:52:31,020 - poly_quest.core.midi_input - ERROR - No MIDI devices found!
+2025-05-25 15:52:31,021 - poly_quest.core.game_engine - WARNING - MIDI device not connected - using keyboard fallback
+2025-05-25 15:52:31,021 - poly_quest.core.game_engine - INFO - Game engine initialized successfully
+2025-05-25 15:52:31,021 - poly_quest.core.game_engine - INFO - Game engine started
+2025-05-25 15:52:39,549 - __main__ - INFO - Game interrupted by user
+2025-05-25 15:52:39,549 - poly_quest.core.midi_input - INFO - MIDI input handler stopped
+2025-05-25 15:52:39,550 - poly_quest.core.game_engine - INFO - Game engine stopped
+2025-05-25 15:52:39,550 - __main__ - INFO - Game stopped
+2025-05-25 15:52:40,920 - __main__ - INFO - Starting Poly Hypertron Quest 4004...
+2025-05-25 15:52:40,921 - __main__ - INFO - Game initialized successfully
+2025-05-25 15:52:40,921 - __main__ - INFO - Controls: Touch Kaossilator Pro touchpad to move
+2025-05-25 15:52:40,921 - __main__ - INFO - Press 'q' or ESC to quit, 'r' to reset
+2025-05-25 15:52:40,921 - poly_quest.core.game_engine - INFO - Initializing game engine...
+2025-05-25 15:52:40,967 - poly_quest.core.midi_input - INFO - Auto-connected to: KAOSSILATOR PRO 1 PAD 0
+2025-05-25 15:52:40,969 - poly_quest.core.midi_input - INFO - MIDI input handler started
+2025-05-25 15:52:40,969 - poly_quest.core.game_engine - INFO - Game engine initialized successfully
+2025-05-25 15:52:40,969 - poly_quest.core.game_engine - INFO - Game engine started
+2025-05-25 15:52:58,511 - __main__ - INFO - Game interrupted by user
+2025-05-25 15:52:58,519 - poly_quest.core.midi_input - INFO - MIDI input handler stopped
+2025-05-25 15:52:58,519 - poly_quest.core.game_engine - INFO - Game engine stopped
+2025-05-25 15:52:58,520 - __main__ - INFO - Game stopped
+2025-05-25 15:55:19,189 - __main__ - INFO - Starting Poly Hypertron Quest 4004...
+2025-05-25 15:55:19,190 - __main__ - INFO - Game initialized successfully
+2025-05-25 15:55:19,190 - __main__ - INFO - Controls: Touch Kaossilator Pro touchpad to move
+2025-05-25 15:55:19,190 - __main__ - INFO - Press 'q' or ESC to quit, 'r' to reset
+2025-05-25 15:55:19,190 - poly_quest.core.game_engine - INFO - Initializing game engine...
+2025-05-25 15:55:19,231 - poly_quest.core.midi_input - INFO - Auto-connected to: KAOSSILATOR PRO 1 PAD 0
+2025-05-25 15:55:19,232 - poly_quest.core.midi_input - INFO - MIDI input handler started
+2025-05-25 15:55:19,232 - poly_quest.core.game_engine - INFO - Game engine initialized successfully
+2025-05-25 15:55:19,232 - poly_quest.core.game_engine - INFO - Game engine started

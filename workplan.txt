@@ -1,0 +1,92 @@
+# Tarmac Festival Mini Game – Engineering Plan (Pygame Variant)
+
+## 1 Overview
+
+Create a self‑contained, top‑down exploration game for the Tarmac Festival that runs on a Raspberry Pi 3 and is controlled exclusively by a Kaossilator XY MIDI pad. Visuals use solid green rectangles on black for a glitchy CRT‑terminal feel. The player walks the festival grounds, chats at Points‑of‑Interest (POIs), collects a few items, and launches the Polytron 4000.
+
+---
+
+## 2 Tech Stack
+
+| Layer          | Choice                          | Rationale                                                                   |
+| -------------- | ------------------------------- | --------------------------------------------------------------------------- |
+| Language       | \*\*Python \*\*                 | Ubiquitous on Pi; plays well with Pygame & mido                             |
+| Rendering/Loop | **Pygame 2**                    | Hardware‑accelerated rectangle blits, easy timing, deployable as single exe |
+| MIDI           | **mido + python‑rtmidi**        | Reliable CC reading, cross‑platform                                         |
+| Map Loader     | **pytmx**                       | Parses TMX maps from the free Tiled editor                                  |
+| Data           | JSON for dialogue & quest state | Hot‑reloadable by organiser                                                 |
+
+---
+
+## 3 Module Breakdown (execution order)
+
+1. **Input Layer** – Read Kaossilator CC values; apply dead‑zone; map press zones to dialogue selection.
+2. **Core Game Loop** – Fixed timestep; global speed multiplier.
+3. **Map System** – Load **TMX** (from Tiled); detect collisions & POI entry.
+4. **Renderer** – Draw road & POI rectangles; highlight current POI; optional CRT scanline & glitch overlay.
+5. **Dialogue System** – JSON schema with text, two choices, grey‑out after pick; hooks for speed and quest flags (`hasCoffee`, `hasPaper`).
+6. **Quest Logic** – Paper → Watto → Coffee → Hyperraumantrieb → Win; inactivity timer (warn @ 2 min 50 s, reset @ 3 min).
+7. **Packaging** – `install.sh` for Pi; optional PyInstaller Windows build.
+
+---
+
+## 4 Data Formats
+
+### 4.1 TMX (Tile Map XML)
+
+TMX is the XML file type exported by the **Tiled Map Editor**. Each object you draw in Tiled (rectangles for roads and POIs) is stored with coordinates and custom properties. **The game will use TMX exclusively—there is no JSON fallback.**
+
+| Property | Type   | Example        | Purpose                                    |
+| -------- | ------ | -------------- | ------------------------------------------ |
+| `name`   | string | `Polytron4000` | Display name & dialogue lookup key         |
+| `class`  | int    | `0`            | Numeric ID that drives quest / speed logic |
+
+Road rectangles require no extra properties (they are treated as walkable areas), they are marked with class "99". Everything else is not walkable.
+
+The runtime employs **pytmx** to iterate over the *Object Layer* and detect POI entry:
+
+```python
+for obj in tmx_data.objects:
+    if obj.name and player.rect.colliderect(obj):
+        trigger_poi(obj.name, obj.properties["class"])
+```
+
+> **Map‑Authoring Workflow**
+>
+> 1. Open **Tiled** → create an *Object Layer*.
+> 2. Draw roads (green) and POIs (brighter green) as rectangles.
+> 3. For every POI rectangle add two custom properties: `name` (string) and `class` (int) using the list in §6.
+> 4. Save as `festival_map.tmx` and copy it into the game’s `assets/` folder.
+
+---
+
+---
+
+## 5 Development Order
+
+1. **Scaffold** – Pygame window, fixed loop, black screen.
+2. **MIDI Diagnostics** – Log CC values; visual dead‑zone indicator.
+3. **Player Sprite & Movement** – Green square that moves per CC input, clamped to window.
+4. **Map Loader & Collision** – Parse TMX; draw rectangles; stop player at edges; trigger POI entry.
+5. **Dialogue UI** – Overlay window; option selection via pad halves; grey‑out chosen options.
+6. **Quest & Speed** – Apply speed modifiers; maintain quest flags; implement win screen.
+7. **Inactivity Reset** – Global timer resets game after 3 min idle.
+8. **Polish** – CRT shader, flicker effect, sound beeps.
+9. **Packaging** – Pi install script; optional Windows exe.
+
+---
+
+## 6 List Of POIs:
+
+POI 0: Polytron4000&#x20;
+POI 1: Brausecus&#x20;
+POI 2: Resonant&#x20;
+POI 3: Vacanza&#x20;
+POI 4: Looserlounge&#x20;
+POI 5: L300&#x20;
+POI 6: Orgia&#x20;
+POI 7: Lila Drache&#x20;
+POI 8: Nest&#x20;
+POI 9: Workshopspace&#x20;
+POI 10: 2. Reihe
+
