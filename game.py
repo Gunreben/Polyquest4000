@@ -44,6 +44,8 @@ class TarmacGame:
         self.midi_x = 64  # Center position (0-127)
         self.midi_y = 64  # Center position (0-127)
         self.last_midi_time = time.time()
+        self.midi_pause_threshold = 0.2  # Time in seconds to consider as a pause
+        self.last_midi_value = None  # Track last MIDI value for pause detection
         
         # Dialogue system
         self.dialogue_active = False
@@ -52,12 +54,19 @@ class TarmacGame:
         self.dialogue_confirmed = False
         self.last_tap_time = 0
         self.tap_cooldown = 0.3  # Prevent accidental double taps
+        self.dialogue_state = "selecting"  # Can be "selecting" or "confirming"
         
         # Game data
         self.inventory = set()
         self.quest_flags = set()
         self.pois = []
         self.walkable_areas = []
+        self.zugang_areas = []  # New: Zugang areas (class 98)
+        
+        # POI interaction control
+        self.last_poi_visited = None  # Track which POI was last visited
+        self.has_been_on_weg = True   # Track if player has been on Weg since last POI
+        self.is_first_interaction = True  # Track if this is the first Polytron4000 interaction
         
         # POI type mapping - updated for new map
         self.poi_types = {
@@ -119,8 +128,12 @@ class TarmacGame:
                     width = float(obj.get('width', 0))
                     height = float(obj.get('height', 0))
                     
-                    if obj_type == 99:  # Walkable areas
+                    if obj_type == 99:  # Weg (walkable roads)
                         self.walkable_areas.append({
+                            'x': x, 'y': y, 'width': width, 'height': height
+                        })
+                    elif obj_type == 98:  # Zugang (POI access areas)
+                        self.zugang_areas.append({
                             'x': x, 'y': y, 'width': width, 'height': height
                         })
                     else:  # POIs
@@ -131,7 +144,7 @@ class TarmacGame:
                             'x': x, 'y': y, 'width': width, 'height': height
                         })
             
-            print(f"Loaded {len(self.pois)} POIs and {len(self.walkable_areas)} walkable areas")
+            print(f"Loaded {len(self.pois)} POIs, {len(self.walkable_areas)} Weg areas, and {len(self.zugang_areas)} Zugang areas")
             
         except Exception as e:
             print(f"Failed to load map: {e}")
@@ -166,34 +179,46 @@ class TarmacGame:
             return
             
         try:
+            current_time = time.time()
+            time_since_last_midi = current_time - self.last_midi_time
+            
             # Process all pending MIDI messages
             for msg in self.midi_port.iter_pending():
                 if msg.type == 'control_change':
-                    current_time = time.time()
-                    
                     if msg.control == 12:  # X-axis control
                         self.midi_x = msg.value
                         self.last_midi_time = current_time
-                        
-                        # Handle dialogue navigation
-                        if self.dialogue_active and current_time - self.last_tap_time > self.tap_cooldown:
-                            if msg.value > 100:  # Upper half tap
-                                if self.selected_choice == 1:  # Switch to upper choice
-                                    self.selected_choice = 0
-                                elif self.selected_choice == 0:  # Confirm upper choice
-                                    self.dialogue_confirmed = True
-                                self.last_tap_time = current_time
-                            elif msg.value < 27:  # Lower half tap
-                                if self.selected_choice == 0:  # Switch to lower choice
-                                    self.selected_choice = 1
-                                elif self.selected_choice == 1:  # Confirm lower choice
-                                    self.dialogue_confirmed = True
-                                self.last_tap_time = current_time
+                        self.last_midi_value = msg.value
                     
                     elif msg.control == 13:  # Y-axis control
                         self.midi_y = msg.value
                         self.last_midi_time = current_time
+                        self.last_midi_value = msg.value
                         
+                        # Handle dialogue navigation using Y-axis with adjusted thresholds
+                        if self.dialogue_active and time_since_last_midi > self.tap_cooldown:
+                            if msg.value > 75:  # Upper half (adjusted threshold)
+                                if self.dialogue_state == "selecting":
+                                    self.selected_choice = 0
+                                    self.dialogue_state = "confirming"
+                                elif self.dialogue_state == "confirming" and self.selected_choice == 0:
+                                    self.dialogue_confirmed = True
+                                    self.dialogue_state = "selecting"
+                                self.last_tap_time = current_time
+                            
+                            elif msg.value < 53:  # Lower half (adjusted threshold)
+                                if self.dialogue_state == "selecting":
+                                    self.selected_choice = 1
+                                    self.dialogue_state = "confirming"
+                                elif self.dialogue_state == "confirming" and self.selected_choice == 1:
+                                    self.dialogue_confirmed = True
+                                    self.dialogue_state = "selecting"
+                                self.last_tap_time = current_time
+            
+            # Check for MIDI pause to reset dialogue state
+            if self.dialogue_active and time_since_last_midi > self.midi_pause_threshold:
+                self.dialogue_state = "selecting"
+            
         except Exception as e:
             print(f"MIDI error: {e}")
     
@@ -229,20 +254,52 @@ class TarmacGame:
                                  self.player_y - self.player_size//2,
                                  self.player_size, self.player_size)
         
-        # Check POI interactions
-        for poi in self.pois:
-            poi_rect = pygame.Rect(poi['x'], poi['y'], poi['width'], poi['height'])
-            if player_rect.colliderect(poi_rect) and not self.dialogue_active:
-                self.start_dialogue(poi['name'])
+        # Check if player is on a Weg (class 99)
+        is_on_weg = False
+        for area in self.walkable_areas:
+            area_rect = pygame.Rect(area['x'], area['y'], area['width'], area['height'])
+            if player_rect.colliderect(area_rect):
+                is_on_weg = True
                 break
+        
+        # Update Weg status
+        if is_on_weg:
+            self.has_been_on_weg = True
+        
+        # Check POI interactions (can interact directly with POIs)
+        if not self.dialogue_active:
+            for poi in self.pois:
+                poi_rect = pygame.Rect(poi['x'], poi['y'], poi['width'], poi['height'])
+                if player_rect.colliderect(poi_rect):
+                    # Allow interaction if:
+                    # 1. This is a new POI, OR
+                    # 2. Player has been on Weg since last visiting this POI
+                    if (self.last_poi_visited != poi['name'] or self.has_been_on_weg):
+                        self.start_dialogue(poi['name'])
+                        self.last_poi_visited = poi['name']
+                        self.has_been_on_weg = False  # Reset until player goes to Weg again
+                    break
     
     def start_dialogue(self, poi_name):
         """Start dialogue with a POI"""
         if poi_name in self.dialogue_data:
             self.dialogue_active = True
             self.current_dialogue = self.dialogue_data[poi_name]['initial']
+            
+            # Special handling for first Polytron4000 interaction
+            if poi_name == "Polytron4000" and self.is_first_interaction:
+                self.current_dialogue = {
+                    "text": "Welcome to the Tarmac Festival! The mighty Polytron 4000 needs the Hyperraumantrieb to activate. Your mission is to find it!",
+                    "choices": [
+                        {"text": "I'll help find the Hyperraumantrieb!", "action": "close"},
+                        {"text": "Not interested", "action": "close"}
+                    ]
+                }
+                self.is_first_interaction = False
+            
             self.selected_choice = 0
             self.dialogue_confirmed = False
+            self.dialogue_state = "selecting"
             print(f"Started dialogue with {poi_name}")
     
     def handle_dialogue_action(self, action):
@@ -250,6 +307,7 @@ class TarmacGame:
         if action == "close":
             self.dialogue_active = False
             self.current_dialogue = None
+            # Don't reset last_poi_visited here to maintain cooldown
         elif action == "win_game":
             print("🎉 GAME WON! Polytron 4000 activated!")
             self.dialogue_active = False
@@ -346,25 +404,48 @@ class TarmacGame:
             choice_y = box_y + box_height - 80
             
             for i, choice in enumerate(choices):
-                color = self.BRIGHT_GREEN if i == self.selected_choice else self.DIM_GREEN
+                # Determine color based on selection and confirmation state
+                if i == self.selected_choice:
+                    if self.dialogue_state == "confirming":
+                        color = self.BRIGHT_GREEN
+                    else:
+                        color = self.GREEN
+                else:
+                    color = self.DIM_GREEN
+                
+                # Build choice text with instructions
                 choice_text = f"{'>' if i == self.selected_choice else ' '} {choice['text']}"
                 
-                # Show tap instruction
-                if i == 0:
-                    choice_text += " (tap upper half)"
-                else:
-                    choice_text += " (tap lower half)"
+                # Add state-specific instructions
+                if self.dialogue_state == "selecting":
+                    if i == 0:
+                        choice_text += " (tap upper half to select)"
+                    else:
+                        choice_text += " (tap lower half to select)"
+                else:  # confirming
+                    if i == self.selected_choice:
+                        choice_text += " (tap same half to confirm)"
                 
                 text_surface = self.font.render(choice_text, True, color)
                 self.screen.blit(text_surface, (box_x + 20, choice_y + i * 25))
+        
+        # Draw MIDI debug info for dialogue
+        debug_text = f"MIDI Y: {self.midi_y} | State: {self.dialogue_state} | Selected: {self.selected_choice}"
+        text_surface = self.font.render(debug_text, True, self.GREEN)
+        self.screen.blit(text_surface, (10, 60))
     
     def draw(self):
         """Main draw function"""
         self.screen.fill(self.BLACK)
         
-        # Draw walkable areas (debug)
+        # Draw walkable areas (Weg - class 99) filled with slight green
         for area in self.walkable_areas:
-            pygame.draw.rect(self.screen, self.DIM_GREEN, 
+            pygame.draw.rect(self.screen, (0, 50, 0),  # Very dark green fill
+                           (area['x'], area['y'], area['width'], area['height']))
+        
+        # Draw Zugang areas (class 98) in grey outline
+        for area in self.zugang_areas:
+            pygame.draw.rect(self.screen, self.GREY, 
                            (area['x'], area['y'], area['width'], area['height']), 1)
         
         # Draw POIs
@@ -373,9 +454,13 @@ class TarmacGame:
             pygame.draw.rect(self.screen, color, 
                            (poi['x'], poi['y'], poi['width'], poi['height']), 2)
             
-            # POI label
+            # POI label centered in the rectangle
             text_surface = self.font.render(poi['name'], True, color)
-            self.screen.blit(text_surface, (poi['x'], poi['y'] - 20))
+            text_rect = text_surface.get_rect()
+            # Center the text in the POI rectangle
+            text_x = poi['x'] + (poi['width'] - text_rect.width) // 2
+            text_y = poi['y'] + (poi['height'] - text_rect.height) // 2
+            self.screen.blit(text_surface, (text_x, text_y))
         
         # Draw player
         pygame.draw.circle(self.screen, self.BRIGHT_GREEN, 
@@ -386,11 +471,16 @@ class TarmacGame:
         text_surface = self.font.render(debug_text, True, self.GREEN)
         self.screen.blit(text_surface, (10, 10))
         
+        # Draw POI interaction status
+        poi_status = f"Last POI: {self.last_poi_visited} | On Weg: {self.has_been_on_weg}"
+        text_surface = self.font.render(poi_status, True, self.GREEN)
+        self.screen.blit(text_surface, (10, 35))
+        
         # Draw inventory
         if self.inventory:
             inv_text = f"Inventory: {', '.join(self.inventory)}"
             text_surface = self.font.render(inv_text, True, self.GREEN)
-            self.screen.blit(text_surface, (10, 35))
+            self.screen.blit(text_surface, (10, 60))
         
         # Draw dialogue
         self.draw_dialogue()
