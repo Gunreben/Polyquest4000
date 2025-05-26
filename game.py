@@ -466,21 +466,24 @@ class TarmacGame:
         pygame.draw.circle(self.screen, self.BRIGHT_GREEN, 
                          (int(self.player_x), int(self.player_y)), self.player_size)
         
-        # Draw MIDI debug info
+        # Draw MIDI debug info in upper right corner
         debug_text = f"MIDI X: {self.midi_x} Y: {self.midi_y} | Pos: ({int(self.player_x)}, {int(self.player_y)})"
         text_surface = self.font.render(debug_text, True, self.GREEN)
-        self.screen.blit(text_surface, (10, 10))
+        text_rect = text_surface.get_rect()
+        self.screen.blit(text_surface, (self.width - text_rect.width - 10, 10))
         
-        # Draw POI interaction status
+        # Draw POI interaction status in upper right corner
         poi_status = f"Last POI: {self.last_poi_visited} | On Weg: {self.has_been_on_weg}"
         text_surface = self.font.render(poi_status, True, self.GREEN)
-        self.screen.blit(text_surface, (10, 35))
+        text_rect = text_surface.get_rect()
+        self.screen.blit(text_surface, (self.width - text_rect.width - 10, 35))
         
-        # Draw inventory
+        # Draw inventory in upper right corner
         if self.inventory:
             inv_text = f"Inventory: {', '.join(self.inventory)}"
             text_surface = self.font.render(inv_text, True, self.GREEN)
-            self.screen.blit(text_surface, (10, 60))
+            text_rect = text_surface.get_rect()
+            self.screen.blit(text_surface, (self.width - text_rect.width - 10, 60))
         
         # Draw dialogue
         self.draw_dialogue()
