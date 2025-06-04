@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="256" height="192" tilewidth="4" tileheight="4" infinite="0" nextlayerid="4" nextobjectid="41">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="256" height="192" tilewidth="4" tileheight="4" infinite="0" nextlayerid="4" nextobjectid="48">
  <layer id="1" name="Kachelebene 1" width="256" height="192">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -197,17 +197,16 @@
 </data>
  </layer>
  <objectgroup id="2" name="Objektebene 1">
-  <object id="4" name="Brausecus" type="1" x="126.36" y="590.909" width="184.848" height="133.333"/>
+  <object id="4" name="Brausecus" type="1" x="108.36" y="590.909" width="184.848" height="133.333"/>
   <object id="6" name="Weg" type="99" x="312" y="544" width="28" height="213.333"/>
-  <object id="8" name="Weg" type="99" x="340.67" y="628.667" width="82" height="30.33"/>
+  <object id="8" name="Zugang" type="98" x="340.67" y="628.667" width="82" height="30.33"/>
   <object id="9" name="Resonant" type="2" x="422.67" y="594.667" width="108" height="84.6667"/>
   <object id="12" name="Weg" type="99" x="314.667" y="423" width="614.77" height="124.33"/>
   <object id="14" name="Weg" type="99" x="857.333" y="544" width="48" height="216"/>
-  <object id="15" name="Weg" type="99" x="857.333" y="544"/>
-  <object id="17" name="Looserlounge" type="4" x="901.333" y="657.333" width="114.667" height="54.6667"/>
-  <object id="18" name="Vacanza" type="3" x="668" y="617.333" width="193.333" height="98.6667"/>
+  <object id="17" name="Looserlounge" type="4" x="914.667" y="657.333" width="101.333" height="54.6667"/>
+  <object id="18" name="Vacanza" type="3" x="649" y="617.333" width="193.333" height="98.6667"/>
   <object id="19" name="Weg" type="99" x="129.333" y="421.333" width="258.667" height="48"/>
-  <object id="22" name="L300" type="5" x="140" y="469.67" width="140" height="50.6667"/>
+  <object id="22" name="L300" type="5" x="140" y="483.67" width="140" height="50.6667"/>
   <object id="23" name="Weg" type="99" x="129" y="73.67" width="62.6667" height="348.67"/>
   <object id="24" name="Orgia" type="6" x="2" y="379.67" width="117.333" height="102.667"/>
   <object id="25" name="Lila Drache" type="7" x="3" y="275.67" width="117.333" height="82"/>
@@ -222,6 +221,10 @@
   <object id="38" name="Zugang" type="98" x="117.667" y="184" width="11.3333" height="46.6667"/>
   <object id="39" name="Zugang" type="98" x="120.333" y="285.333" width="9" height="36.6667"/>
   <object id="40" name="Zugang" type="98" x="119.667" y="395.33" width="10.6667" height="59"/>
+  <object id="43" name="Zugang" type="98" x="173.667" y="469.333" width="75.6667" height="15"/>
+  <object id="44" name="Zugang" type="98" x="293.667" y="619" width="18.6667" height="61"/>
+  <object id="46" name="Zugang" type="98" x="842.667" y="628.333" width="15.3333" height="29.3333"/>
+  <object id="47" name="Zugang" x="905.333" y="664.667" width="9.66667" height="29"/>
  </objectgroup>
  <imagelayer id="3" name="Bildebene 1" visible="0" opacity="0.3" offsetx="-136" offsety="-4">
   <image source="TarmacMap.png" width="1280" height="768"/>
