@@ -211,7 +211,7 @@
   <object id="24" name="Orgia" type="6" x="2" y="379.67" width="117.333" height="102.667"/>
   <object id="25" name="Lila Drache" type="7" x="3" y="275.67" width="117.333" height="82"/>
   <object id="26" name="Nest" type="8" x="24" y="177.333" width="93.3333" height="61.3333"/>
-  <object id="27" name="Polytron400" type="0" x="33.33" y="91.67" width="85.3333" height="70.6667"/>
+  <object id="27" name="Polytron4000" type="0" x="33.33" y="91.67" width="85.3333" height="70.6667"/>
   <object id="28" name="Workshopspace" type="9" x="59.33" y="33.3333" width="57.3333" height="46.6667"/>
   <object id="30" name="Weg" type="99" x="129.333" y="8" width="281.333" height="65.3333"/>
   <object id="31" name="2. Reihe" type="10" x="309.333" y="92.33" width="142" height="100"/>
@@ -224,7 +224,7 @@
   <object id="43" name="Zugang" type="98" x="173.667" y="469.333" width="75.6667" height="15"/>
   <object id="44" name="Zugang" type="98" x="293.667" y="619" width="18.6667" height="61"/>
   <object id="46" name="Zugang" type="98" x="842.667" y="628.333" width="15.3333" height="29.3333"/>
-  <object id="47" name="Zugang" x="905.333" y="664.667" width="9.66667" height="29"/>
+  <object id="47" name="Zugang" type="98" x="905.333" y="664.667" width="9.66667" height="29"/>
  </objectgroup>
  <imagelayer id="3" name="Bildebene 1" visible="0" opacity="0.3" offsetx="-136" offsety="-4">
   <image source="TarmacMap.png" width="1280" height="768"/>
