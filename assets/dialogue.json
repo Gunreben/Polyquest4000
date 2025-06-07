@@ -112,7 +112,7 @@
         },
         {
           "text": "Ask Watto about the Hyperraumantrieb",
-          "condition": "!coffee_for_watto",
+          "condition": "!hascoffee_for_watto",
           "action": "watto_dialogue"
         },
         {

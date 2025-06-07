@@ -883,18 +883,30 @@ class TarmacGame:
         """Check if a dialogue condition is met"""
         if condition == "watto_wants_coffee_and_acid_mode":
             # Special combined condition
-            return "watto_wants_coffee" in self.quest_flags and self.acid_mode
+            has_quest = "watto_wants_coffee" in self.quest_flags
+            has_acid = self.acid_mode
+            result = has_quest and has_acid
+            print(f"🔍 Checking watto_wants_coffee_and_acid_mode: quest={has_quest}, acid={has_acid}, result={result}")
+            return result
+        elif condition.startswith('!has'):
+            # Negative has item condition
+            item = condition.replace('!has', '').lower()
+            has_item = item in self.inventory
+            # Debug output for coffee
+            if "coffee" in item:
+                print(f"🔍 Checking for NOT having {item}: {not has_item} (inventory: {self.inventory})")
+            return not has_item
         elif condition.startswith('!'):
-            # Negative condition
+            # Negative quest flag condition
             flag_name = condition[1:]
             return flag_name not in self.quest_flags
         elif condition.startswith('has'):
             # Has item condition
             item = condition.replace('has', '').lower()
             has_item = item in self.inventory
-            # Debug output for Hyperraumantrieb
-            if item == "hyperraumantrieb":
-                print(f"🔍 Checking for Hyperraumantrieb: {has_item} (inventory: {self.inventory})")
+            # Debug output for important items
+            if item == "hyperraumantrieb" or "coffee" in item:
+                print(f"🔍 Checking for {item}: {has_item} (inventory: {self.inventory})")
             return has_item
         else:
             # Quest flag condition
