@@ -1,15 +1,28 @@
 {
   "Polytron4000": {
     "initial": {
-      "text": "The mighty Polytron 4000 stands before you, humming with potential energy. It needs the Hyperraumantrieb to activate!",
+      "text": "The mighty Polytron 4000 stands before you, humming with potential energy. Ancient alien technology awaits activation...",
       "choices": [
         {
           "text": "Insert Hyperraumantrieb",
-          "condition": "hasHyperraumantrieb",
+          "condition": "hashyperraumantrieb",
           "action": "win_game"
         },
         {
-          "text": "Not ready yet",
+          "text": "Examine the machine",
+          "action": "examine_polytron"
+        },
+        {
+          "text": "Step back",
+          "action": "close"
+        }
+      ]
+    },
+    "examine_polytron": {
+      "text": "The Polytron 4000 is a marvel of interstellar engineering. There's a distinctive slot that looks like it needs a specific component - the Hyperraumantrieb. Without it, this old radio station will remain silent.",
+      "choices": [
+        {
+          "text": "I need to find the Hyperraumantrieb",
           "action": "close"
         }
       ]
@@ -42,16 +55,95 @@
   },
   "Resonant": {
     "initial": {
-      "text": "Resonant - where sound becomes art. The frequencies here are perfectly tuned.",
+      "text": "Resonant - Tattooine Spaceport. The sounds here resonate through space and time. What catches your attention?",
       "choices": [
         {
-          "text": "Can you help with the Polytron?",
-          "condition": "hasCoffee",
-          "action": "give_soundmodule"
+          "text": "Approach the spaced out man",
+          "action": "spaced_out_man"
         },
         {
-          "text": "Just listening",
+          "text": "Investigate the old abandoned petrol pump",
+          "action": "petrol_pump"
+        }
+      ]
+    },
+    "spaced_out_man": {
+      "text": "You approach a man who seems to have been awake since long before our time, lost in a galaxy far, far away. He takes a long hit from a fat blunt and mumbles...",
+      "choices": [
+        {
+          "text": "Ask about the Hyperraumantrieb",
+          "action": "druids_response"
+        },
+        {
+          "text": "Leave him in peace",
           "action": "close"
+        }
+      ]
+    },
+    "druids_response": {
+      "text": "The spaced out man looks through you with glazed eyes and speaks in a distant voice: 'These are not the druids you are looking for...' *takes another hit* He seems completely lost in his own world.",
+      "choices": [
+        {
+          "text": "Try to get his attention",
+          "action": "close"
+        },
+        {
+          "text": "Give up and leave",
+          "action": "close"
+        }
+      ]
+    },
+    "petrol_pump_fly": {
+      "text": "You examine the rusty, abandoned petrol pump from forgotten times. A fat fly buzzes lazily around it, but nothing else seems interesting here.",
+      "choices": [
+        {
+          "text": "Walk away",
+          "action": "close"
+        }
+      ]
+    },
+    "petrol_pump_watto": {
+      "text": "Through your acid-enhanced vision, the fat fly transforms! You see Watto, the junk dealer, hunched over ancient machinery. His wings buzz as he notices you.",
+      "choices": [
+        {
+          "text": "Give Watto the coffee",
+          "condition": "hascoffee_for_watto",
+          "action": "watto_completion_dialogue"
+        },
+        {
+          "text": "Ask Watto about the Hyperraumantrieb",
+          "condition": "!coffee_for_watto",
+          "action": "watto_dialogue"
+        },
+        {
+          "text": "Back away slowly",
+          "action": "close"
+        }
+      ]
+    },
+    "watto_dialogue": {
+      "text": "Watto's wings flutter excitedly: 'Ah! The Hyperraumantrieb you seek, yes? Watto has it, but Watto is very thirsty! Bring me a coffee from the place with the loud music and second row seating, you must!'",
+      "choices": [
+        {
+          "text": "I'll get you coffee",
+          "action": "watto_quest"
+        },
+        {
+          "text": "Maybe later",
+          "action": "close"
+        }
+      ]
+    },
+    "watto_completion": {
+      "text": "Watto's eyes light up as he sees the coffee! 'Ahhhh, perfect! Coffee it is! *sips* Now Watto can give you the Hyperraumantrieb!' He hands you a gleaming device.",
+      "choices": [
+        {
+          "text": "Take the Hyperraumantrieb",
+          "action": "give_hyperraumantrieb"
+        },
+        {
+          "text": "Thank Watto",
+          "action": "give_hyperraumantrieb"
         }
       ]
     }
@@ -88,15 +180,53 @@
   },
   "L300": {
     "initial": {
-      "text": "L300 - Technical equipment and electronic components. Need something specific?",
+      "text": "L300 - Psychedelic stage with mandalas and space music. The air shimmers with otherworldly energy. What draws your attention?",
       "choices": [
         {
-          "text": "Looking for Hyperraumantrieb parts",
-          "condition": "hasSoundmodule",
-          "action": "give_hyperraumantrieb"
+          "text": "Investigate the spinning mandala wheel",
+          "action": "mandala_investigation"
         },
         {
-          "text": "Just checking inventory",
+          "text": "Explore the forest behind the bar",
+          "action": "forest_exploration"
+        }
+      ]
+    },
+    "mandala_investigation": {
+      "text": "You approach the mesmerizing mandala wheel. Its hypnotic patterns reveal a hidden compartment containing an ancient book of perforated papers in vivid magical colors. The papers seem to pulse with energy...",
+      "choices": [
+        {
+          "text": "Eat one of the magical paper pieces",
+          "action": "activate_acid_mode"
+        },
+        {
+          "text": "Leave the book alone",
+          "action": "close"
+        }
+      ]
+    },
+    "forest_exploration": {
+      "text": "Behind the bar, you discover a mystical forest clearing. An ancient oracle sits beneath a glowing tree, her eyes reflecting infinite wisdom.",
+      "choices": [
+        {
+          "text": "Speak with the oracle",
+          "action": "oracle_wisdom"
+        },
+        {
+          "text": "Return to the stage",
+          "action": "close"
+        }
+      ]
+    },
+    "oracle_wisdom": {
+      "text": "The oracle's voice echoes with ancient knowledge: 'Child of the cosmos, seek what appears as merely a fly to the unenlightened eye. Only those who have tasted the colors of reality shall see the truth that lies within.'",
+      "choices": [
+        {
+          "text": "Thank the oracle",
+          "action": "oracle_advice"
+        },
+        {
+          "text": "Ask for more guidance",
           "action": "close"
         }
       ]
@@ -164,14 +294,46 @@
   },
   "2. Reihe": {
     "initial": {
-      "text": "Second Row seating - Perfect view of the main stage. Great for observing the festival.",
+      "text": "2. Reihe - Coffee and House music. The aroma of freshly brewed coffee mixes with pulsing beats. What draws you in?",
       "choices": [
         {
-          "text": "Watch the show",
-          "action": "give_inspiration"
+          "text": "Climb up to the treehouse",
+          "action": "treehouse"
         },
         {
-          "text": "Keep moving",
+          "text": "Visit the coffee stand",
+          "action": "coffee_stand"
+        }
+      ]
+    },
+    "treehouse": {
+      "text": "You climb up into the mysterious treehouse. The music grows louder, the lights more intense... everything starts spinning... you feel consciousness slipping away...",
+      "choices": [
+        {
+          "text": "Try to stay awake",
+          "action": "teleport_psycare"
+        },
+        {
+          "text": "Let go and pass out",
+          "action": "teleport_psycare"
+        }
+      ]
+    },
+    "coffee_stand": {
+      "text": "The coffee stand beckons with the rich aroma of premium beans. The barista looks up expectantly.",
+      "choices": [
+        {
+          "text": "Order coffee for yourself",
+          "condition": "!watto_wants_coffee",
+          "action": "drink_coffee_simple"
+        },
+        {
+          "text": "Get coffee for Watto and yourself",
+          "condition": "watto_wants_coffee_and_acid_mode",
+          "action": "drink_coffee_watto"
+        },
+        {
+          "text": "Just browsing",
           "action": "close"
         }
       ]

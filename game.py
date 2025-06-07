@@ -26,6 +26,29 @@ class TarmacGame:
         self.GREY = (128, 128, 128)
         self.RED = (255, 0, 0)
         
+        # Psychedelic colors for acid mode
+        self.PSYCHEDELIC_COLORS = {
+            'PRIMARY': (255, 0, 255),      # Bright magenta
+            'BRIGHT': (255, 100, 255),     # Bright pink
+            'DIM': (150, 0, 150),          # Dim purple
+            'ACCENT1': (0, 255, 255),      # Cyan
+            'ACCENT2': (255, 255, 0),      # Yellow
+            'ACCENT3': (255, 100, 0),      # Orange
+        }
+        
+        # Current color scheme (starts with normal green)
+        self.current_colors = {
+            'PRIMARY': self.GREEN,
+            'BRIGHT': self.BRIGHT_GREEN,
+            'DIM': self.DIM_GREEN,
+            'ACCENT1': self.GREEN,
+            'ACCENT2': self.BRIGHT_GREEN,
+            'ACCENT3': self.DIM_GREEN,
+        }
+        
+        # Acid mode state
+        self.acid_mode = False
+        
         # Font
         self.font = pygame.font.Font(None, 24)
         self.title_font = pygame.font.Font(None, 36)
@@ -34,11 +57,18 @@ class TarmacGame:
         self.running = True
         self.clock = pygame.time.Clock()
         
+        # Win state
+        self.game_won = False
+        self.win_time = 0
+        self.win_animation_phase = 0
+        
         # Player
         self.player_x = 100.0
         self.player_y = 100.0
         self.player_size = 8
         self.player_speed = 2.0
+        self.base_speed = 2.0  # Base speed for resetting
+        self.speed_multiplier = 1.0  # Speed multiplier from coffee, etc.
         
         # MIDI controls - smooth movement
         self.midi_x = 64  # Center position (0-127)
@@ -85,17 +115,17 @@ class TarmacGame:
         
         # POI type mapping - updated for new map
         self.poi_types = {
-            0: "Polytron4000",    # Main goal
-            1: "Brausecus",       # Drinks
-            2: "Resonant",        # Music/Sound
-            3: "Vacanza",         # Relaxation
-            4: "Looserlounge",    # Social
-            5: "L300",            # Tech/Equipment
-            6: "Orgia",           # Party
-            7: "Lila Drache",     # Mystery
-            8: "Nest",            # Cozy space
-            9: "Workshopspace",   # Learning
-            10: "2. Reihe"        # Seating/Viewing
+            0: "Polytron4000",    # Main goal: Old interstellar radio station / space ship
+            1: "Brausecus",       # Punk stage, crazy electric guitars and beer
+            2: "Resonant",        # Tattooine: Spaceport, where you will find watto if you ate the megical paper
+            3: "Vacanza",         # Relaxation, Chill vibes, sauna space
+            4: "Looserlounge",    # Lost People, beer, best time of you life but also homework
+            5: "L300",            # Psychedelic stage, mandalas and space music, sounds like polytrons exhaust
+            6: "Orgia",           # Excentric unstructured party
+            7: "Lila Drache",     # Alpenhütte mit Apreski Musik
+            8: "Nest",            # Cozy space, Chimaera and Schlacke (Schnaps)
+            9: "Workshopspace",   # Learning, Crafting and building
+            10: "2. Reihe"        # Coffee and House music
         }
         
         # Load game data
@@ -355,7 +385,6 @@ class TarmacGame:
                     "text": "Welcome to the Tarmac Festival! The mighty Polytron 4000 needs the Hyperraumantrieb to activate. Your mission is to find it!",
                     "choices": [
                         {"text": "I'll help find the Hyperraumantrieb!", "action": "close"},
-                        {"text": "Not interested", "action": "close"}
                     ]
                 }
                 self.is_first_interaction = False
@@ -365,6 +394,14 @@ class TarmacGame:
             self.dialogue_state = "selecting"
             print(f"Started dialogue with {poi_name}")
     
+    def switch_dialogue_state(self, poi_name, state_name):
+        """Switch to a different dialogue state for the same POI"""
+        if poi_name in self.dialogue_data and state_name in self.dialogue_data[poi_name]:
+            self.current_dialogue = self.dialogue_data[poi_name][state_name]
+            self.selected_choice = 0
+            self.dialogue_confirmed = False
+            self.dialogue_state = "selecting"
+    
     def handle_dialogue_action(self, action):
         """Handle dialogue choice actions"""
         if action == "close":
@@ -372,8 +409,13 @@ class TarmacGame:
             self.current_dialogue = None
             # Don't reset last_poi_visited here to maintain cooldown
         elif action == "win_game":
-            print("🎉 GAME WON! Polytron 4000 activated!")
+            print("🎉 🛸 GAME WON! 🛸 🎉")
+            print("The Polytron 4000 roars to life! Interstellar communications restored!")
+            print("The Tarmac Festival is saved! Well done, space traveler!")
             self.dialogue_active = False
+            # Set win state
+            self.game_won = True
+            self.win_time = time.time()
         elif action.startswith("give_"):
             item = action.replace("give_", "")
             self.inventory.add(item)
@@ -384,10 +426,143 @@ class TarmacGame:
             self.quest_flags.add(flag)
             print(f"Quest flag set: {flag}")
             self.dialogue_active = False
+        elif action == "activate_acid_mode":
+            # Special action for eating the magical paper
+            self.activate_acid_mode()
+            self.inventory.add("acid_mode_active")
+            print("🌀 ACID MODE ACTIVATED! Reality becomes more colorful...")
+            self.dialogue_active = False
+        elif action == "oracle_advice":
+            # Oracle gives advice about looking for flies
+            self.quest_flags.add("oracle_advice")
+            print("🔮 The oracle's wisdom resonates within you...")
+            self.dialogue_active = False
+        elif action == "mandala_investigation":
+            # Transition to mandala investigation dialogue
+            self.switch_dialogue_state("L300", "mandala_investigation")
+        elif action == "forest_exploration":
+            # Transition to forest exploration dialogue
+            self.switch_dialogue_state("L300", "forest_exploration")
+        elif action == "watto_quest":
+            # Watto asks for coffee - sets quest flag
+            self.quest_flags.add("watto_wants_coffee")
+            print("🛸 Watto: 'Bring me coffee from 2. Reihe, you must!'")
+            self.dialogue_active = False
+        elif action == "teleport_psycare":
+            # Teleport to psycare coordinates
+            self.teleport_player(350, 540)
+            self.dialogue_active = False
+        elif action == "drink_coffee_simple":
+            # Simple coffee drinking (no Watto quest)
+            self.drink_coffee(watto_quest_active=False)
+            self.dialogue_active = False
+        elif action == "drink_coffee_watto":
+            # Coffee for Watto + yourself
+            self.drink_coffee(watto_quest_active=True)
+            self.dialogue_active = False
+        elif action == "spaced_out_man":
+            # Transition to spaced out man dialogue
+            self.switch_dialogue_state("Resonant", "spaced_out_man")
+        elif action == "petrol_pump":
+            # Transition to petrol pump dialogue (acid mode dependent)
+            if self.acid_mode:
+                self.switch_dialogue_state("Resonant", "petrol_pump_watto")
+            else:
+                self.switch_dialogue_state("Resonant", "petrol_pump_fly")
+        elif action == "treehouse":
+            # Transition to treehouse dialogue
+            self.switch_dialogue_state("2. Reihe", "treehouse")
+        elif action == "coffee_stand":
+            # Transition to coffee stand dialogue
+            self.switch_dialogue_state("2. Reihe", "coffee_stand")
+        elif action == "druids_response":
+            # Transition to druids response dialogue
+            self.switch_dialogue_state("Resonant", "druids_response")
+        elif action == "watto_dialogue":
+            # Transition to Watto dialogue state
+            self.switch_dialogue_state("Resonant", "watto_dialogue")
+        elif action == "oracle_wisdom":
+            # Transition to oracle wisdom dialogue state
+            self.switch_dialogue_state("L300", "oracle_wisdom")
+        elif action == "watto_completion_dialogue":
+            # Transition to Watto completion dialogue
+            self.switch_dialogue_state("Resonant", "watto_completion")
+        elif action == "give_hyperraumantrieb":
+            # Watto gives the Hyperraumantrieb
+            self.inventory.add("hyperraumantrieb")
+            if "coffee_for_watto" in self.inventory:
+                self.inventory.remove("coffee_for_watto")
+            print("🛸 Received the Hyperraumantrieb! Now you can activate the Polytron 4000!")
+            self.dialogue_active = False
+        elif action == "examine_polytron":
+            # Transition to examine Polytron4000 dialogue
+            self.switch_dialogue_state("Polytron4000", "examine_polytron")
+    
+    def activate_acid_mode(self):
+        """Switch to psychedelic color mode"""
+        self.acid_mode = True
+        self.current_colors = self.PSYCHEDELIC_COLORS.copy()
+        print("🎨 Colors shift into psychedelic patterns!")
+    
+    def teleport_player(self, x, y):
+        """Teleport player to specific coordinates"""
+        self.player_x = float(x)
+        self.player_y = float(y)
+        # Keep player on screen
+        self.player_x = max(self.player_size, min(self.width - self.player_size, self.player_x))
+        self.player_y = max(self.player_size, min(self.height - self.player_size, self.player_y))
+        print(f"🌀 Teleported to ({int(self.player_x)}, {int(self.player_y)})")
+    
+    def apply_speed_boost(self, multiplier):
+        """Apply speed multiplier (stacks with existing multipliers)"""
+        self.speed_multiplier *= multiplier
+        self.player_speed = self.base_speed * self.speed_multiplier
+        print(f"⚡ Speed boost! Current speed: {self.player_speed:.1f} (x{self.speed_multiplier:.1f})")
+    
+    def drink_coffee(self, watto_quest_active=False):
+        """Handle coffee drinking with different effects based on Watto quest"""
+        if watto_quest_active:
+            # Take coffee for Watto AND drink one yourself
+            self.inventory.add("coffee_for_watto")
+            self.apply_speed_boost(2.0)  # Double speed when getting coffee for Watto
+            print("☕ Got coffee for Watto and drank one yourself! You feel incredibly energized!")
+        else:
+            # Just drink coffee for yourself
+            self.apply_speed_boost(1.5)  # 1.5x speed boost
+            print("☕ Coffee consumed! You feel more energetic!")
+    
+    def update_psychedelic_effects(self):
+        """Update psychedelic visual effects when in acid mode"""
+        if not self.acid_mode:
+            return
+        
+        # Create pulsing color effects based on time
+        import math
+        time_factor = time.time() * 2  # Speed of pulsing
+        
+        # Pulse the colors
+        base_colors = self.PSYCHEDELIC_COLORS.copy()
+        pulse = abs(math.sin(time_factor)) * 0.3 + 0.7  # Pulse between 0.7 and 1.0
+        
+        for key in self.current_colors:
+            base_r, base_g, base_b = base_colors[key]
+            # Apply pulsing effect
+            self.current_colors[key] = (
+                min(255, int(base_r * pulse)),
+                min(255, int(base_g * pulse)),
+                min(255, int(base_b * pulse))
+            )
     
     def update(self):
         """Main game update loop"""
         self.handle_midi()
+        
+        # Update psychedelic effects if in acid mode
+        self.update_psychedelic_effects()
+        
+        # Don't update game mechanics if game is won
+        if self.game_won:
+            return
         
         if self.dialogue_active:
             # Handle dialogue confirmation
@@ -400,8 +575,12 @@ class TarmacGame:
                         # Check conditions
                         if 'condition' in choice:
                             condition = choice['condition']
-                            if condition.startswith('has') and condition.replace('has', '').lower() not in self.inventory:
-                                print(f"You need: {condition.replace('has', '')}")
+                            condition_met = self.check_condition(condition)
+                            if not condition_met:
+                                if condition.startswith('has'):
+                                    print(f"You need: {condition.replace('has', '')}")
+                                else:
+                                    print(f"Condition not met: {condition}")
                                 self.dialogue_active = False
                                 return
                         
@@ -439,7 +618,7 @@ class TarmacGame:
         box_y = (self.height - box_height) // 2
         
         pygame.draw.rect(self.screen, self.BLACK, (box_x, box_y, box_width, box_height))
-        pygame.draw.rect(self.screen, self.GREEN, (box_x, box_y, box_width, box_height), 2)
+        pygame.draw.rect(self.screen, self.current_colors['PRIMARY'], (box_x, box_y, box_width, box_height), 2)
         
         # Dialogue text
         text = self.current_dialogue.get('text', '')
@@ -463,7 +642,7 @@ class TarmacGame:
             lines.append(' '.join(current_line))
         
         for line in lines:
-            text_surface = self.font.render(line, True, self.GREEN)
+            text_surface = self.font.render(line, True, self.current_colors['PRIMARY'])
             self.screen.blit(text_surface, (box_x + 20, y_offset))
             y_offset += 25
         
@@ -477,7 +656,7 @@ class TarmacGame:
             for i, choice in enumerate(choices):
                 # Calculate choice rectangle for clicking
                 choice_text = f"{'>' if i == self.selected_choice else ' '} {choice['text']}"
-                text_surface = self.font.render(choice_text, True, self.GREEN)
+                text_surface = self.font.render(choice_text, True, self.current_colors['PRIMARY'])
                 text_width, text_height = text_surface.get_size()
                 
                 # Create clickable rectangle (with some padding)
@@ -488,16 +667,16 @@ class TarmacGame:
                 # Determine color based on selection, confirmation state, and hover
                 if i == self.hovered_choice:
                     # Mouse hover - brightest
-                    color = self.BRIGHT_GREEN
+                    color = self.current_colors['BRIGHT']
                     # Draw hover background
                     pygame.draw.rect(self.screen, (0, 100, 0), choice_rect)
                 elif i == self.selected_choice:
                     if self.dialogue_state == "confirming":
-                        color = self.BRIGHT_GREEN
+                        color = self.current_colors['BRIGHT']
                     else:
-                        color = self.GREEN
+                        color = self.current_colors['PRIMARY']
                 else:
-                    color = self.DIM_GREEN
+                    color = self.current_colors['DIM']
                 
                 # Draw choice text
                 choice_display_text = f"{'>' if i == self.selected_choice else ' '} {choice['text']}"
@@ -521,17 +700,17 @@ class TarmacGame:
                 
                 # Draw clickable area outline when hovering (debug visual)
                 if i == self.hovered_choice:
-                    pygame.draw.rect(self.screen, self.GREEN, choice_rect, 1)
+                    pygame.draw.rect(self.screen, self.current_colors['PRIMARY'], choice_rect, 1)
         
         # Draw MIDI debug info for dialogue (only if not hovering with mouse)
         if self.hovered_choice == -1:
             debug_text = f"MIDI Y: {self.midi_y} | State: {self.dialogue_state} | Selected: {self.selected_choice}"
-            text_surface = self.font.render(debug_text, True, self.GREEN)
+            text_surface = self.font.render(debug_text, True, self.current_colors['PRIMARY'])
             self.screen.blit(text_surface, (10, 60))
         else:
             # Show mouse interaction info instead
             debug_text = f"Mouse hover on choice {self.hovered_choice} - Click to select"
-            text_surface = self.font.render(debug_text, True, self.BRIGHT_GREEN)
+            text_surface = self.font.render(debug_text, True, self.current_colors['BRIGHT'])
             self.screen.blit(text_surface, (10, 60))
     
     def draw(self):
@@ -550,7 +729,7 @@ class TarmacGame:
         
         # Draw POIs
         for poi in self.pois:
-            color = self.BRIGHT_GREEN if poi['name'] == 'Polytron4000' else self.GREEN
+            color = self.current_colors['BRIGHT'] if poi['name'] == 'Polytron4000' else self.current_colors['PRIMARY']
             pygame.draw.rect(self.screen, color, 
                            (poi['x'], poi['y'], poi['width'], poi['height']), 2)
             
@@ -563,12 +742,12 @@ class TarmacGame:
             self.screen.blit(text_surface, (text_x, text_y))
         
         # Draw player
-        pygame.draw.circle(self.screen, self.BRIGHT_GREEN, 
+        pygame.draw.circle(self.screen, self.current_colors['BRIGHT'], 
                          (int(self.player_x), int(self.player_y)), self.player_size)
         
         # Draw MIDI debug info in upper right corner
         debug_text = f"MIDI X: {self.midi_x} Y: {self.midi_y} | Pos: ({int(self.player_x)}, {int(self.player_y)})"
-        text_surface = self.font.render(debug_text, True, self.GREEN)
+        text_surface = self.font.render(debug_text, True, self.current_colors['PRIMARY'])
         text_rect = text_surface.get_rect()
         self.screen.blit(text_surface, (self.width - text_rect.width - 10, 10))
         
@@ -577,34 +756,40 @@ class TarmacGame:
             debug_mode_text = f"DEBUG MODE ON | Mouse: ({self.mouse_pos[0]}, {self.mouse_pos[1]})"
             if self.moving_to_target and self.target_x is not None:
                 debug_mode_text += f" | Target: ({int(self.target_x)}, {int(self.target_y)})"
-            text_surface = self.font.render(debug_mode_text, True, self.BRIGHT_GREEN)
+            text_surface = self.font.render(debug_mode_text, True, self.current_colors['BRIGHT'])
             text_rect = text_surface.get_rect()
             self.screen.blit(text_surface, (10, 85))
             
             # Draw mouse cursor as a small crosshair
             mouse_x, mouse_y = self.mouse_pos
-            pygame.draw.line(self.screen, self.GREEN, (mouse_x - 5, mouse_y), (mouse_x + 5, mouse_y), 1)
-            pygame.draw.line(self.screen, self.GREEN, (mouse_x, mouse_y - 5), (mouse_x, mouse_y + 5), 1)
+            pygame.draw.line(self.screen, self.current_colors['PRIMARY'], (mouse_x - 5, mouse_y), (mouse_x + 5, mouse_y), 1)
+            pygame.draw.line(self.screen, self.current_colors['PRIMARY'], (mouse_x, mouse_y - 5), (mouse_x, mouse_y + 5), 1)
             
             # Draw target position if moving
             if self.moving_to_target and self.target_x is not None:
                 target_x, target_y = int(self.target_x), int(self.target_y)
                 # Draw target crosshair
-                pygame.draw.line(self.screen, self.BRIGHT_GREEN, (target_x - 10, target_y), (target_x + 10, target_y), 2)
-                pygame.draw.line(self.screen, self.BRIGHT_GREEN, (target_x, target_y - 10), (target_x, target_y + 10), 2)
+                pygame.draw.line(self.screen, self.current_colors['BRIGHT'], (target_x - 10, target_y), (target_x + 10, target_y), 2)
+                pygame.draw.line(self.screen, self.current_colors['BRIGHT'], (target_x, target_y - 10), (target_x, target_y + 10), 2)
                 # Draw target circle
-                pygame.draw.circle(self.screen, self.BRIGHT_GREEN, (target_x, target_y), 15, 2)
+                pygame.draw.circle(self.screen, self.current_colors['BRIGHT'], (target_x, target_y), 15, 2)
         
         # Draw POI interaction status in upper right corner
         poi_status = f"Last POI: {self.last_poi_visited} | On Weg: {self.has_been_on_weg}"
-        text_surface = self.font.render(poi_status, True, self.GREEN)
+        # Add acid mode indicator
+        if self.acid_mode:
+            poi_status += " | 🌀 ACID MODE"
+        # Add speed indicator if boosted
+        if self.speed_multiplier > 1.0:
+            poi_status += f" | ⚡ Speed x{self.speed_multiplier:.1f}"
+        text_surface = self.font.render(poi_status, True, self.current_colors['PRIMARY'])
         text_rect = text_surface.get_rect()
         self.screen.blit(text_surface, (self.width - text_rect.width - 10, 35))
         
         # Draw inventory in upper right corner
         if self.inventory:
             inv_text = f"Inventory: {', '.join(self.inventory)}"
-            text_surface = self.font.render(inv_text, True, self.GREEN)
+            text_surface = self.font.render(inv_text, True, self.current_colors['PRIMARY'])
             text_rect = text_surface.get_rect()
             self.screen.blit(text_surface, (self.width - text_rect.width - 10, 60))
         
@@ -612,9 +797,13 @@ class TarmacGame:
         self.draw_dialogue()
         
         # Draw title
-        title_surface = self.title_font.render("TARMAC FESTIVAL - POLYTRON 4000", True, self.BRIGHT_GREEN)
+        title_color = self.current_colors['ACCENT2'] if self.acid_mode else self.current_colors['BRIGHT']
+        title_surface = self.title_font.render("TARMAC FESTIVAL - POLYTRON 4000", True, title_color)
         title_rect = title_surface.get_rect(center=(self.width//2, 30))
         self.screen.blit(title_surface, title_rect)
+        
+        # Draw win screen on top of everything
+        self.draw_win_screen()
         
         pygame.display.flip()
     
@@ -625,6 +814,10 @@ class TarmacGame:
         print("🎯 Find and activate the Polytron 4000!")
         print("🐛 Press 'D' to toggle debug mode (click-to-move)")
         print("🖱️  Mouse: Click dialogue choices to select them")
+        print("🌀 Visit L300 to discover the magical paper and enter acid mode!")
+        print("🛸 In acid mode, find Watto at Resonant to get the Hyperraumantrieb!")
+        print("☕ Get coffee from 2. Reihe to complete Watto's quest!")
+        print("🎉 After winning, press 'R' to restart or ESC to exit!")
         
         while self.running:
             # Handle pygame events
@@ -641,6 +834,9 @@ class TarmacGame:
                         self.target_x = None
                         self.target_y = None
                         print(f"Debug mode: {'ON' if self.debug_mode else 'OFF'}")
+                    elif event.key == pygame.K_r and self.game_won:
+                        # Restart game when won
+                        self.restart_game()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # Handle mouse click
                     if event.button == 1:  # Left click
@@ -682,6 +878,157 @@ class TarmacGame:
         if self.midi_port:
             self.midi_port.close()
         pygame.quit()
+
+    def check_condition(self, condition):
+        """Check if a dialogue condition is met"""
+        if condition == "watto_wants_coffee_and_acid_mode":
+            # Special combined condition
+            return "watto_wants_coffee" in self.quest_flags and self.acid_mode
+        elif condition.startswith('!'):
+            # Negative condition
+            flag_name = condition[1:]
+            return flag_name not in self.quest_flags
+        elif condition.startswith('has'):
+            # Has item condition
+            item = condition.replace('has', '').lower()
+            has_item = item in self.inventory
+            # Debug output for Hyperraumantrieb
+            if item == "hyperraumantrieb":
+                print(f"🔍 Checking for Hyperraumantrieb: {has_item} (inventory: {self.inventory})")
+            return has_item
+        else:
+            # Quest flag condition
+            return condition in self.quest_flags
+
+    def draw_win_screen(self):
+        """Draw the victory screen with animations"""
+        if not self.game_won:
+            return
+        
+        import math
+        
+        # Calculate animation timing
+        elapsed = time.time() - self.win_time
+        
+        # Create pulsing overlay
+        overlay = pygame.Surface((self.width, self.height))
+        alpha = int(abs(math.sin(elapsed * 3)) * 100 + 50)  # Pulse between 50-150 alpha
+        overlay.set_alpha(alpha)
+        overlay.fill((50, 0, 50))  # Dark purple
+        self.screen.blit(overlay, (0, 0))
+        
+        # Win box
+        box_width = 700
+        box_height = 400
+        box_x = (self.width - box_width) // 2
+        box_y = (self.height - box_height) // 2
+        
+        # Animated box colors
+        pulse = abs(math.sin(elapsed * 2)) * 0.5 + 0.5  # Pulse between 0.5-1.0
+        box_color = (
+            int(255 * pulse),
+            int(100 * pulse),
+            int(255 * pulse)
+        )
+        
+        pygame.draw.rect(self.screen, self.BLACK, (box_x, box_y, box_width, box_height))
+        pygame.draw.rect(self.screen, box_color, (box_x, box_y, box_width, box_height), 4)
+        
+        # Title with rainbow effect
+        rainbow_colors = [
+            (255, 0, 0), (255, 127, 0), (255, 255, 0),
+            (0, 255, 0), (0, 0, 255), (75, 0, 130), (148, 0, 211)
+        ]
+        color_index = int((elapsed * 2) % len(rainbow_colors))
+        title_color = rainbow_colors[color_index]
+        
+        # Win title
+        win_title = "🎉 VICTORY! 🎉"
+        title_surface = self.title_font.render(win_title, True, title_color)
+        title_rect = title_surface.get_rect(center=(self.width//2, box_y + 60))
+        self.screen.blit(title_surface, title_rect)
+        
+        # Subtitle
+        subtitle = "POLYTRON 4000 ACTIVATED!"
+        subtitle_surface = self.font.render(subtitle, True, self.current_colors['BRIGHT'])
+        subtitle_rect = subtitle_surface.get_rect(center=(self.width//2, box_y + 110))
+        self.screen.blit(subtitle_surface, subtitle_rect)
+        
+        # Win messages
+        win_messages = [
+            "🛸 Interstellar communications restored!",
+            "🎵 The Tarmac Festival is saved!",
+            "🌌 Well done, space traveler!",
+            "",
+            "🎮 Thank you for playing!",
+            "",
+            "Press ESC to exit or R to restart"
+        ]
+        
+        y_offset = box_y + 160
+        for i, message in enumerate(win_messages):
+            if message:  # Skip empty lines for spacing
+                # Staggered text appearance
+                if elapsed > (i * 0.5):
+                    text_color = self.current_colors['PRIMARY']
+                    if "Press ESC" in message:
+                        text_color = self.current_colors['DIM']
+                    
+                    text_surface = self.font.render(message, True, text_color)
+                    text_rect = text_surface.get_rect(center=(self.width//2, y_offset))
+                    self.screen.blit(text_surface, text_rect)
+            
+            y_offset += 30
+        
+        # Floating particles effect
+        for i in range(20):
+            particle_time = elapsed + i * 0.1
+            x = (self.width // 2) + math.sin(particle_time) * (100 + i * 10)
+            y = (self.height // 2) + math.cos(particle_time * 0.7) * (50 + i * 5)
+            
+            particle_color = rainbow_colors[i % len(rainbow_colors)]
+            if 0 <= x <= self.width and 0 <= y <= self.height:
+                pygame.draw.circle(self.screen, particle_color, (int(x), int(y)), 3)
+
+    def restart_game(self):
+        """Restart the game to initial state"""
+        print("🔄 Restarting game...")
+        
+        # Reset player position
+        self.player_x = 100.0
+        self.player_y = 100.0
+        self.player_speed = 2.0
+        self.speed_multiplier = 1.0
+        
+        # Reset game states
+        self.acid_mode = False
+        self.game_won = False
+        self.dialogue_active = False
+        self.current_dialogue = None
+        self.moving_to_target = False
+        self.target_x = None
+        self.target_y = None
+        
+        # Reset colors to normal
+        self.current_colors = {
+            'PRIMARY': self.GREEN,
+            'BRIGHT': self.BRIGHT_GREEN,
+            'DIM': self.DIM_GREEN,
+            'ACCENT1': self.GREEN,
+            'ACCENT2': self.BRIGHT_GREEN,
+            'ACCENT3': self.DIM_GREEN,
+        }
+        
+        # Reset inventory and flags
+        self.inventory = set()
+        self.quest_flags = set()
+        
+        # Reset POI interaction tracking
+        self.last_poi_visited = None
+        self.has_been_on_weg = True
+        self.is_first_interaction = True
+        
+        print("✨ Game restarted! Good luck, space traveler!")
 
 if __name__ == "__main__":
     game = TarmacGame()
