@@ -568,7 +568,12 @@ class TarmacGame:
             # Handle dialogue confirmation
             if self.dialogue_confirmed:
                 if self.current_dialogue and 'choices' in self.current_dialogue:
-                    choices = self.current_dialogue['choices']
+                    choices = self.get_visible_choices()
+
+                    # Guard against selected_choice being out of range after filtering
+                    if self.selected_choice >= len(choices):
+                        self.selected_choice = max(0, len(choices) - 1)
+                
                     if self.selected_choice < len(choices):
                         choice = choices[self.selected_choice]
                         
@@ -604,7 +609,12 @@ class TarmacGame:
         """Draw dialogue interface"""
         if not self.dialogue_active or not self.current_dialogue:
             return
-        
+
+        # Make sure the selected choice index is valid for the currently visible choices
+        visible_choices = self.get_visible_choices()
+        if self.selected_choice >= len(visible_choices):
+            self.selected_choice = max(0, len(visible_choices) - 1)
+
         # Semi-transparent overlay
         overlay = pygame.Surface((self.width, self.height))
         overlay.set_alpha(128)
@@ -650,7 +660,7 @@ class TarmacGame:
         self.dialogue_choice_rects = []  # Reset clickable areas
         
         if 'choices' in self.current_dialogue:
-            choices = self.current_dialogue['choices']
+            choices = visible_choices  # Only show choices whose conditions are met
             choice_y = box_y + box_height - 80
             
             for i, choice in enumerate(choices):
@@ -911,6 +921,21 @@ class TarmacGame:
         else:
             # Quest flag condition
             return condition in self.quest_flags
+
+    # ---------------------------------------------------------------------
+    # Helper for dialogue choice visibility
+    # ---------------------------------------------------------------------
+    def get_visible_choices(self):
+        """Return list of choices whose conditions are currently met."""
+        if not self.current_dialogue or 'choices' not in self.current_dialogue:
+            return []
+
+        visible = []
+        for choice in self.current_dialogue['choices']:
+            # Show the choice if there is no condition or if the condition evaluates to True
+            if 'condition' not in choice or self.check_condition(choice['condition']):
+                visible.append(choice)
+        return visible
 
     def draw_win_screen(self):
         """Draw the victory screen with animations"""
