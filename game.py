@@ -304,9 +304,9 @@ class TarmacGame:
             self.target_y = None
             return
         
-        # Move towards target
-        move_x = (dx / distance) * self.movement_speed
-        move_y = (dy / distance) * self.movement_speed
+        # Move towards target using the same speed as MIDI movement (respects speed boosts)
+        move_x = (dx / distance) * self.player_speed
+        move_y = (dy / distance) * self.player_speed
         
         self.player_x += move_x
         self.player_y += move_y
@@ -528,7 +528,7 @@ class TarmacGame:
             print("☕ Got coffee for Watto and drank one yourself! You feel incredibly energized!")
         else:
             # Just drink coffee for yourself
-            self.apply_speed_boost(1.5)  # 1.5x speed boost
+            self.apply_speed_boost(4.5)  # 1.5x speed boost
             print("☕ Coffee consumed! You feel more energetic!")
     
     def update_psychedelic_effects(self):
