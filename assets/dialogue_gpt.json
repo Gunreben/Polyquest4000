@@ -1,29 +1,28 @@
 {
   "Polytron4000": {
     "initial": {
-      "text_en": "Du siehst ein paar schrottige Roboter, die darauf Warten, dass das Polytron4000 abheben kann. Wo bleibt der Hyperraumantrieb?",
-      "text_en": "The mighty Polytron 4000 stands before you, humming with potential energy. Ancient alien technology awaits activation...",
+      "text": "The mighty Polytron 4000 stands before you, humming with potential energy. Ancient alien technology awaits activation...",
       "choices": [
         {
-          "text": "Hyperraumantrieb in den Hyperraum-Antriebsschlitz stecken.",
+          "text": "Insert Hyperraumantrieb",
           "condition": "hashyperraumantrieb",
           "action": "win_game"
         },
         {
-          "text": "Polytron4000 geneauer betrachten.",
+          "text": "Examine the machine",
           "action": "examine_polytron"
         },
         {
-          "text": "Erstmal weiter zu den anderen Floors.",
+          "text": "Step back",
           "action": "close"
         }
       ]
     },
     "examine_polytron": {
-      "text": "Hier und da bekriegen sich einige rostige Roboter, vor dem zentralen Mapping steht eine kathatonische Gestalt, die mit ihren Extremitäten seltsame Verrekungen macht.",
+      "text": "The Polytron 4000 is a marvel of interstellar engineering. There's a distinctive slot that looks like it needs a specific component - the Hyperraumantrieb. Without it, this old radio station will remain silent.",
       "choices": [
         {
-          "text": "Puh, mal lieber weiter den Hyperraumantrieb suchen...",
+          "text": "I need to find the Hyperraumantrieb",
           "action": "close"
         }
       ]

@@ -382,9 +382,9 @@ class TarmacGame:
             # Special handling for first Polytron4000 interaction
             if poi_name == "Polytron4000" and self.is_first_interaction:
                 self.current_dialogue = {
-                    "text": "Welcome to the Tarmac Festival! The mighty Polytron 4000 needs the Hyperraumantrieb to activate. Your mission is to find it!",
+                    "text": "HILFE!!! Das POLYTRON4000 muss zum Parallelwelt-TAMRAC. POLYTRON4000 braucht Hyper-Hyperraumantrieb. ",
                     "choices": [
-                        {"text": "I'll help find the Hyperraumantrieb!", "action": "close"},
+                        {"text": "LET'S GO - Hyper-Hyperraumantrieb finden.", "action": "close"},
                     ]
                 }
                 self.is_first_interaction = False
