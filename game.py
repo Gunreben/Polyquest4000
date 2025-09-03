@@ -497,6 +497,39 @@ class TarmacGame:
         elif action == "examine_polytron":
             # Transition to examine Polytron4000 dialogue
             self.switch_dialogue_state("Polytron4000", "examine_polytron")
+        elif action == "open_beer":
+            # Transition to open beer dialogue
+            self.switch_dialogue_state("Brausecus", "open_beer")
+        elif action == "petrol_pump_fly":
+            # Transition to petrol pump fly dialogue
+            self.switch_dialogue_state("Resonant", "petrol_pump_fly")
+        elif action == "petrol_pump_watto":
+            # Transition to petrol pump watto dialogue
+            self.switch_dialogue_state("Resonant", "petrol_pump_watto")
+        elif action == "give_energy":
+            # Transition to give energy dialogue at Vacanza
+            self.switch_dialogue_state("Vacanza", "give_energy")
+        elif action == "give_info":
+            # Transition to give info dialogue at Looserlounge
+            self.switch_dialogue_state("Looserlounge", "give_info")
+        elif action == "dino_bong_pre_teleport":
+            # Transition to dino bong dialogue at Orgia
+            self.switch_dialogue_state("Orgia", "dino_bong_pre_teleport")
+        elif action == "dino_bong":
+            # Transition to dino bong effect dialogue at Orgia
+            self.switch_dialogue_state("Orgia", "dino_bong")
+        elif action == "rhubarb_schnaps_pre_teleport":
+            # Transition to rhubarb schnaps dialogue at Lila Drache
+            self.switch_dialogue_state("Lila Drache", "rhubarb_schnaps_pre_teleport")
+        elif action == "sleep_well":
+            # Transition to sleep well dialogue at Nest
+            self.switch_dialogue_state("Nest", "sleep_well")
+        elif action == "give_knowledge":
+            # Transition to give knowledge dialogue at Workshopspace
+            self.switch_dialogue_state("Workshopspace", "give_knowledge")
+        elif action == "k_hole":
+            # Transition to k hole dialogue at 2. Reihe
+            self.switch_dialogue_state("2. Reihe", "k_hole")
     
     def activate_acid_mode(self):
         """Switch to psychedelic color mode"""

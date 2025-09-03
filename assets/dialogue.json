@@ -1,343 +1,463 @@
 {
-  "Polytron4000": {
+    "Polytron4000": {
     "initial": {
-      "text_en": "Du siehst ein paar schrottige Roboter, die darauf Warten, dass das Polytron4000 abheben kann. Wo bleibt der Hyperraumantrieb?",
-      "text_en": "The mighty Polytron 4000 stands before you, humming with potential energy. Ancient alien technology awaits activation...",
-      "choices": [
-        {
-          "text": "Hyperraumantrieb in den Hyperraum-Antriebsschlitz stecken.",
-          "condition": "hashyperraumantrieb",
-          "action": "win_game"
-        },
-        {
-          "text": "Polytron4000 geneauer betrachten.",
-          "action": "examine_polytron"
-        },
-        {
-          "text": "Erstmal weiter zu den anderen Floors.",
-          "action": "close"
-        }
-      ]
+    "text": "Du siehst ein paar schrottige Roboter, die darauf Warten, dass das Polytron4000 abheben kann. Wo bleibt der Hyperraumantrieb?",
+    "text_en": "The mighty Polytron 4000 stands before you, humming with potential energy. Ancient alien technology awaits activation...",
+    "choices": [
+    {
+    "text": "Hyperraumantrieb in den Hyperraum-Antriebsschlitz stecken.",
+    "condition": "hashyperraumantrieb",
+    "action": "win_game"
+    },
+    {
+    "text": "Polytron4000 genauer betrachten.",
+    "action": "examine_polytron"
+    },
+    {
+    "text": "Erstmal weiter zu den anderen Floors.",
+    "action": "close"
+    }
+    ]
     },
     "examine_polytron": {
-      "text": "Hier und da bekriegen sich einige rostige Roboter, vor dem zentralen Mapping steht eine kathatonische Gestalt, die mit ihren Extremitäten seltsame Verrekungen macht.",
-      "choices": [
-        {
-          "text": "Puh, mal lieber weiter den Hyperraumantrieb suchen...",
-          "action": "close"
-        }
-      ]
+    "text": "Hier und da bekriegen sich einige rostige Roboter, vor dem zentralen Mapping steht eine kathatonische Gestalt, die mit ihren Extremitaeten seltsame Verrekungen macht.",
+    "choices": [
+    {
+    "text": "Puh, mal lieber weiter den Hyperraumantrieb suchen...",
+    "action": "close"
     }
-  },
-  "Brausecus": {
-    "initial": {
-      "text": "Welcome to Brausecus! The finest beverages in the festival. What can I get you?",
-      "choices": [
-        {
-          "text": "I need coffee for energy",
-          "condition": "hasPaper",
-          "action": "give_coffee"
-        },
-        {
-          "text": "Just browsing",
-          "action": "close"
-        }
-      ]
+    ]
+    }
     },
-    "after_coffee": {
-      "text": "Enjoy your coffee! You look much more energetic now.",
-      "choices": [
-        {
-          "text": "Thanks!",
-          "action": "close"
-        }
-      ]
-    }
-  },
-  "Resonant": {
+    "Brausecus": {
     "initial": {
-      "text": "Resonant - Tattooine Spaceport. The sounds here resonate through space and time. What catches your attention?",
-      "choices": [
-        {
-          "text": "Approach the spaced out man",
-          "action": "spaced_out_man"
-        },
-        {
-          "text": "Investigate the old abandoned petrol pump",
-          "action": "petrol_pump"
-        }
-      ]
+    "text": "Hae, war Brausecus nicht woanders?",
+    "choices": [
+    {
+    "text": "Erstmal n' Bier aufmachen. Du schuettest dein komplettes Bier auf eine freiliegende Mehrfachsteckdose",
+    "action": "open_beer"
+    },
+    {
+    "text": "Punk ist mir echt zu stressig. Hier siehts nicht nach Hyper-Hyperraum aus.",
+    "action": "close"
+    }
+    ]
+    },
+    "open_beer": {
+    "text": "Das Bier zischt auf und sprudelt ueber die Steckdose. Funken fliegen, und ploetzlich flackern die Lichter. Du fuehlst einen leichten Schock, aber hey, das Bier schmeckt jetzt elektrisierend!",
+    "choices": [
+    {
+    "text": "Weitertrinken und abwarten, was passiert.",
+    "action": "close"
+    }
+    ]
+    }
+    },
+    "Resonant": {
+    "initial": {
+    "text": "Resonant - Alter, das sieht ja aus wie bei Star Wars hier - also wenn dann gibts hier einen Hyperraumantrieb?",
+    "choices": [
+    {
+    "text": "Ein verballerter Greis in langer brauner Kutte - lass den mal fragen.",
+    "action": "spaced_out_man"
+    },
+    {
+    "text": "Lass mal die alte Tankstellensaeule da anschauen",
+    "action": "petrol_pump"
+    }
+    ]
     },
     "spaced_out_man": {
-      "text": "You approach a man who seems to have been awake since long before our time, lost in a galaxy far, far away. He takes a long hit from a fat blunt and mumbles...",
-      "choices": [
-        {
-          "text": "Ask about the Hyperraumantrieb",
-          "action": "druids_response"
-        },
-        {
-          "text": "Leave him in peace",
-          "action": "close"
-        }
-      ]
+    "text": "Der Typ sieht aus als haette er 1000 Jahre nicht geschlafen. Er brabbelt vor sich hin und raucht eine lange Pfeiffe...",
+    "choices": [
+    {
+    "text": "Komm wir fragen mal wegen dem Antrieb",
+    "action": "druids_response"
+    },
+    {
+    "text": "Der sieht nicht hilfreich aus.",
+    "action": "close"
+    }
+    ]
     },
     "druids_response": {
-      "text": "The spaced out man looks through you with glazed eyes and speaks in a distant voice: 'These are not the druids you are looking for...' *takes another hit* He seems completely lost in his own world.",
-      "choices": [
-        {
-          "text": "Try to get his attention",
-          "action": "close"
-        },
-        {
-          "text": "Give up and leave",
-          "action": "close"
-        }
-      ]
+    "text": "Der Greis schaut dir ins Gesicht und sagt: 'Das sind nicht die Druiden, nach denen ihr sucht...' Raucht an seiner Pfeiffe. Ihn nockt es komplett aus.",
+    "choices": [
+    {
+    "text": "Puh, also das war nicht hilfreich.",
+    "action": "close"
+    }
+    ]
+    },
+    "petrol_pump": {
+    "text": "Die alte Tankstellensaeule steht da, verstaubt und mysterioes. Etwas summt in der Naehe, als ob sie ein Geheimnis birgt.",
+    "choices": [
+    {
+    "text": "Naeher ran und genauer hinschauen.",
+    "condition": "!acid_mode",
+    "action": "petrol_pump_fly"
+    },
+    {
+    "text": "Naeher ran und genauer hinschauen.",
+    "condition": "acid_mode",
+    "action": "petrol_pump_watto"
+    }
+    ]
     },
     "petrol_pump_fly": {
-      "text": "You examine the rusty, abandoned petrol pump from forgotten times. A fat fly buzzes lazily around it, but nothing else seems interesting here.",
-      "choices": [
-        {
-          "text": "Walk away",
-          "action": "close"
-        }
-      ]
+    "text": "Tanzstelle - Eine widerliche Fliege sitzt auf der Saeule.",
+    "choices": [
+    {
+    "text": "LASS DIE FLIEGE NOCHMAL ANSCHAUEN, WENN WIR DRUFF SIND.",
+    "action": "close"
+    }
+    ]
     },
     "petrol_pump_watto": {
-      "text": "Through your acid-enhanced vision, a fat fly on the petrol pump starts morphing! You see Watto, the junk dealer, hunched over ancient machinery. His wings buzz as he notices you.",
-      "choices": [
-        {
-          "text": "Give Watto the coffee",
-          "condition": "hascoffee_for_watto",
-          "action": "watto_completion_dialogue"
-        },
-        {
-          "text": "Ask Watto about the Hyperraumantrieb",
-          "condition": "!hascoffee_for_watto",
-          "action": "watto_dialogue"
-        },
-        {
-          "text": "Back away slowly",
-          "action": "close"
-        }
-      ]
+    "text": "In deiner ACID-Optik sieht die Fliege aus, wie Watto von Star Wars. Immernoch mega widerlich.",
+    "choices": [
+    {
+    "text": "Hier hast du deinen Kaffee.",
+    "condition": "hascoffee_for_watto",
+    "action": "watto_completion_dialogue"
+    },
+    {
+    "text": "Hallo magische Fliege, hast du den Hyper-Hyperraumantrieb?",
+    "condition": "!hascoffee_for_watto",
+    "action": "watto_dialogue"
+    }
+    ]
     },
     "watto_dialogue": {
-      "text": "Watto's wings flutter excitedly: 'Ah! The Hyperraumantrieb you seek, yes? Watto has it, but Watto is very thirsty! Bring me a coffee from the place with the loud music and second row seating, you must!'",
-      "choices": [
-        {
-          "text": "I'll get you coffee",
-          "action": "watto_quest"
-        },
-        {
-          "text": "Maybe later",
-          "action": "close"
-        }
-      ]
+    "text": "Die Fliege Watto faengt an zu sprechen: 'Ah! Den Hyper-Hyperraumantrieb du suchst, ja? Watto hat ihn, aber Watto ist sehr durstig! Bring mir einen Kaffee vom Platz mit der lauten Musik und der schlechten Sicht aus der hinteren Reihe, du musst!'",
+    "choices": [
+    {
+    "text": "Ok, Weltraumfliege!",
+    "action": "watto_quest"
     },
-    "watto_completion": {
-      "text": "Watto's eyes light up as he sees the coffee! 'Ahhhh, perfect! Coffee it is! *sips* Now Watto can give you the Hyperraumantrieb!' He hands you a gleaming device.",
-      "choices": [
-        {
-          "text": "Take the Hyperraumantrieb",
-          "action": "give_hyperraumantrieb"
-        },
-        {
-          "text": "Thank Watto",
-          "action": "give_hyperraumantrieb"
-        }
-      ]
+    {
+    "text": "Dafuq.",
+    "action": "watto_quest"
     }
-  },
-  "Vacanza": {
-    "initial": {
-      "text": "Vacanza - your relaxation destination. Take a break from the festival chaos.",
-      "choices": [
-        {
-          "text": "I need to recharge",
-          "action": "give_energy"
-        },
-        {
-          "text": "Maybe later",
-          "action": "close"
-        }
-      ]
+    ]
+    },
+    "watto_quest": {
+    "text": "Du nickst der Fliege zu und spuerst, wie die Quest in deinem Kopf pulsiert. Zeit, diesen Kaffee zu besorgen – die Galaxis haengt davon ab!",
+    "choices": [
+    {
+    "text": "Ab zur Kaffeestand.",
+    "action": "close"
     }
-  },
-  "Looserlounge": {
-    "initial": {
-      "text": "Welcome to the Looserlounge! Where the cool kids hang out and share secrets.",
-      "choices": [
-        {
-          "text": "What's the word on the street?",
-          "action": "give_info"
-        },
-        {
-          "text": "Just passing through",
-          "action": "close"
-        }
-      ]
+    ]
+    },
+    "watto_completion_dialogue": {
+    "text": "Du schaust der Fliege tief in die Augen. 'Ahhhh, perfekt! Kaffee! trinkt Jetzt Watto kann dir geben den Hyper-Hyperraumantrieb!' Die Fliege kotet ein glaenzendes Geraet.",
+    "choices": [
+    {
+    "text": "Misstrauisch fasst du tief in den Kot. Es ist tatsaechlich eine Maschine",
+    "action": "give_hyperraumantrieb"
     }
-  },
-  "L300": {
+    ]
+    },
+    "give_hyperraumantrieb": {
+    "text": "Der Hyperraumantrieb glaenzt in deiner Hand, vibrierend mit kosmischer Energie. Du fuehlst dich wie ein Held aus einem Sci-Fi-Film – nur mit mehr Festival-Schweiß.",
+    "choices": [
+    {
+    "text": "Schnell zurueck zum Polytron!",
+    "action": "close"
+    }
+    ]
+    }
+    },
+    "Vacanza": {
     "initial": {
-      "text": "L300 - Psychedelic stage with mandalas and space music. The air shimmers with otherworldly energy. What draws your attention?",
-      "choices": [
-        {
-          "text": "Investigate the spinning mandala wheel",
-          "action": "mandala_investigation"
-        },
-        {
-          "text": "Explore the forest behind the bar",
-          "action": "forest_exploration"
-        }
-      ]
+    "text": "Ist das etwa Downtempo?! Ob es hier wohl Hyper-Hyper wird?",
+    "choices": [
+    {
+    "text": "Geil, hier gibts ne Sauna.",
+    "action": "give_energy"
+    },
+    {
+    "text": "Geil ne Rutsche!",
+    "action": "close"
+    }
+    ]
+    },
+    "give_energy": {
+    "text": "Du betrittst die Sauna, Dampf umhuellt dich wie ein warmer Trip. Deine Energie laedt sich auf, und du fuehlst dich bereit fuer das naechste Abenteuer – oder einen Nackttanz.",
+    "choices": [
+    {
+    "text": "Frisch erholt weiterziehen.",
+    "action": "close"
+    }
+    ]
+    }
+    },
+    "Looserlounge": {
+    "initial": {
+    "text": "Geil, die Looserlounge! Man munkelt hier gibts das beste Booking (und dass der Hausmeister auch als Artist gebucht ist).",
+    "choices": [
+    {
+    "text": "Och, neee, Mathehausaufgaben.",
+    "action": "give_info"
+    },
+    {
+    "text": "Hah, ich bin doch kein Looser, schnell weiter.",
+    "action": "close"
+    }
+    ]
+    },
+    "give_info": {
+    "text": "Du setzt dich hin und knackst ein paar Matheaufgaben. Ploetzlich ergibt alles Sinn – oder ist das der Festival-Vibe? Du lernst, dass der Hyperraumantrieb vielleicht in den Sternen liegt.",
+    "choices": [
+    {
+    "text": "Klug geworden, ab zur naechsten Stage.",
+    "action": "close"
+    }
+    ]
+    }
+    },
+    "L300": {
+    "initial": {
+    "text": "Psychedelischer Fiebertraum. Alles pulsiert. Eigentlich kann man das nur auf Psychedelics ertragen. Vielleicht welche suchen?",
+    "choices": [
+    {
+    "text": "Da ist so Mandala, lass das mal anschauen.",
+    "action": "mandala_investigation"
+    },
+    {
+    "text": "Zu bunt hier, lass mal hinter in den Wald",
+    "action": "forest_exploration"
+    }
+    ]
     },
     "mandala_investigation": {
-      "text": "You approach the mesmerizing mandala wheel. Its hypnotic patterns reveal a hidden compartment containing an ancient book of perforated papers in vivid magical colors. The papers seem to pulse with energy...",
-      "choices": [
-        {
-          "text": "Eat one of the magical paper pieces",
-          "action": "activate_acid_mode"
-        },
-        {
-          "text": "Leave the book alone",
-          "action": "close"
-        }
-      ]
+    "text": "Krasses Mandala-Rad. Dreht sich irgendwie in alle Richtungen. Klebt da nicht ein Papier dran? Das koennte doch...",
+    "choices": [
+    {
+    "text": "Du schiebst dir das Papier in den Mund.",
+    "action": "activate_acid_mode"
+    },
+    {
+    "text": "Haha, das taugt bestimmt nichts. Lass mal was anderes ballern.",
+    "action": "k_hole"
+    }
+    ]
+    },
+    "activate_acid_mode": {
+    "text": "Das Papier loest sich auf deiner Zunge auf, und ploetzlich explodieren die Farben um dich herum. Die Welt wird zu einem wirbelnden Kaleidoskop – willkommen im Acid-Mode, Kumpel!",
+    "choices": [
+    {
+    "text": "Trippig weiterforschen.",
+    "action": "close"
+    }
+    ]
     },
     "forest_exploration": {
-      "text": "Behind the bar, you discover a mystical forest clearing. An ancient oracle sits beneath a glowing tree, her eyes reflecting infinite wisdom.",
-      "choices": [
-        {
-          "text": "Speak with the oracle",
-          "action": "oracle_wisdom"
-        },
-        {
-          "text": "Return to the stage",
-          "action": "close"
-        }
-      ]
+    "text": "Hinter der Bar ist ein mystischer Wald. Ein altes Orakel sitzt unter einem leuchtenden Baum, seine Augen reflektieren unendliche Weisheit - ists das ChatGPT?.",
+    "choices": [
+    {
+    "text": "Lass den mal fragen.",
+    "action": "oracle_wisdom"
+    },
+    {
+    "text": "Zu dunkel hier.",
+    "action": "close"
+    }
+    ]
     },
     "oracle_wisdom": {
-      "text": "The oracle's voice echoes with ancient knowledge: 'Child of the cosmos, seek what appears as merely a fly to the unenlightened eye. Only those who have tasted the colors of reality shall see the truth that lies within.'",
-      "choices": [
-        {
-          "text": "Thank the oracle",
-          "action": "oracle_advice"
-        },
-        {
-          "text": "Ask for more guidance",
-          "action": "close"
-        }
-      ]
+    "text": "Das Orakel brabbelt vor sich hin: 'Kind des Kosmos, suche das, was dir wie eine Fliege erscheint. Nur diejenigen, die die Farben der Realitaet gekostet haben, sehen den Wahrheit, die darin liegt. (Es ist definitiv ChatGPT.)'",
+    "choices": [
+    {
+    "text": "Danke Orakel.",
+    "action": "close"
     }
-  },
-  "Orgia": {
-    "initial": {
-      "text": "Orgia - The wildest party spot at the festival! The energy here is infectious.",
-      "choices": [
-        {
-          "text": "Join the party",
-          "action": "give_party_energy"
-        },
-        {
-          "text": "Too intense for me",
-          "action": "close"
-        }
-      ]
+    ]
     }
-  },
-  "Lila Drache": {
+    },
+    "Orgia": {
     "initial": {
-      "text": "The mysterious Lila Drache... Ancient wisdom flows through this purple dragon.",
-      "choices": [
-        {
-          "text": "Seek wisdom",
-          "action": "give_wisdom"
-        },
-        {
-          "text": "Not ready for mysteries",
-          "action": "close"
-        }
-      ]
+    "text": "Geil, Orgia. Ist das wirklich Musik?",
+    "choices": [
+    {
+    "text": "Dino-Bong rauchen.",
+    "action": "dino_bong_pre_teleport"
+    },
+    {
+    "text": "Bruder, viel zu intense.",
+    "action": "close"
     }
-  },
-  "Nest": {
-    "initial": {
-      "text": "The Nest - A cozy hideaway where festival-goers share stories and resources.",
-      "choices": [
-        {
-          "text": "Share stories",
-          "action": "give_paper"
-        },
-        {
-          "text": "Keep to myself",
-          "action": "close"
-        }
-      ]
+    ]
+    },
+    "dino_bong_pre_teleport": {
+    "text": "Du nimmst einen tiefen Zug vom Dino-Bong, und der Rauch fuellt deine Lungen mit praehistorischem Feuer. Die Beats werden lauter, dein Kopf dreht sich – ploetzlich siehst du Dinos tanzen, und alles wird blurry... Zeit fuer Psycare?",
+    "choices": [
+    {
+    "text": "Lass es dich wegbeamen.",
+    "action": "dino_bong"
     }
-  },
-  "Workshopspace": {
-    "initial": {
-      "text": "Workshopspace - Learn, create, and collaborate. Knowledge is power here.",
-      "choices": [
-        {
-          "text": "Learn something new",
-          "action": "give_knowledge"
-        },
-        {
-          "text": "Not in learning mood",
-          "action": "close"
-        }
-      ]
+    ]
+    },
+    "dino_bong": {
+    "text": "Der Bong-Hit haut dich um, und du beamst direkt in die Psycare. Ist das ein Lolli in deinem Mund?.",
+    "choices": [
+    {
+    "text": "Hab ich da eben Spongebob gesehen?",
+    "action": "teleport_psycare"
     }
-  },
-  "2. Reihe": {
+    ]
+    }
+    },
+    "Lila Drache": {
     "initial": {
-      "text": "2. Reihe - Coffee and House music. The aroma of freshly brewed coffee mixes with pulsing beats. What draws you in?",
-      "choices": [
-        {
-          "text": "Climb up to the treehouse",
-          "action": "treehouse"
-        },
-        {
-          "text": "Visit the coffee stand",
-          "action": "coffee_stand"
-        }
-      ]
+    "text": "Apreski Musik. Wackelnde Schafe. Wild gekleidete Menschen machen eine Modenschau.",
+    "choices": [
+    {
+    "text": "Rhababerschnaps trinken.",
+    "action": "rhubarb_schnaps_pre_teleport"
+    },
+    {
+    "text": "Schaf reiten.",
+    "action": "close"
+    }
+    ]
+    },
+    "rhubarb_schnaps_pre_teleport": {
+    "text": "Du kippst den Rhabarberschnaps runter, und er brennt wie fluessiges Feuer in deiner Kehle. Die Schafe beginnen zu fliegen, die Musik wird zu einem Wirbelsturm – dein Magen rebelliert, und du spuerst den Teleport kommen...",
+    "choices": [
+    {
+    "text": "Ab in die Psycare!",
+    "action": "teleport_psycare"
+    }
+    ]
+    },
+    "teleport_psycare": {
+    "text": "Der Schnaps katapultiert dich in die Psycare-Ecke. Du landest weich, umgeben von beruhigenden Vibes und hilfsbereiten Seelen.",
+    "choices": [
+    {
+    "text": "Ausnuechtern und weiter.",
+    "action": "close"
+    }
+    ]
+    }
+    },
+    "Nest": {
+    "initial": {
+    "text": "Das Nest - Es laeuft ein absurdes Hoerspiel und du meinst, die Klaenge einer Chimaere zu hoeren.",
+    "choices": [
+    {
+    "text": "Kuschel dich ins warme Nestbettchen.",
+    "action": "sleep_well"
+    }
+    ]
+    },
+    "sleep_well": {
+    "text": "Du kuschelst dich ein, das Hoerspiel lullt dich in einen traumhaften Schlaf. Du wachst erfrischt wieder auf.",
+    "choices": [
+    {
+    "text": "Aufstehen und abenteuern.",
+    "action": "close"
+    }
+    ]
+    }
+    },
+    "Workshopspace": {
+    "initial": {
+    "text": "Workshopspace - Learn, create, and collaborate. Knowledge is power here.",
+    "choices": [
+    {
+    "text": "Learn something new",
+    "action": "give_knowledge"
+    },
+    {
+    "text": "Not in learning mood",
+    "action": "close"
+    }
+    ]
+    },
+    "give_knowledge": {
+    "text": "Du tauchst in einen Workshop ein, bastelst und lernst. Ploetzlich klickt es – du weißt jetzt, wie man einen improvisierten Hyperantrieb baut. Oder war das nur der Kreativitaetsboost?",
+    "choices": [
+    {
+    "text": "Mit neuem Wissen weiter.",
+    "action": "close"
+    }
+    ]
+    }
+    },
+    "2. Reihe": {
+    "initial": {
+    "text": "2. Reihe - Coffee and House music. The aroma of freshly brewed coffee mixes with pulsing beats. What draws you in?",
+    "choices": [
+    {
+    "text": "Oh nice, lass mal ins Baumhaus klettern.",
+    "action": "treehouse"
+    },
+    {
+    "text": "Sweeeet, da gibts Kaffee!",
+    "action": "coffee_stand"
+    }
+    ]
     },
     "treehouse": {
-      "text": "You climb up into the mysterious treehouse. The music grows louder, the lights more intense... everything starts spinning... you feel consciousness slipping away...",
-      "choices": [
-        {
-          "text": "Try to stay awake",
-          "action": "teleport_psycare"
-        },
-        {
-          "text": "Let go and pass out",
-          "action": "teleport_psycare"
-        }
-      ]
+    "text": "Schnaufend kletterst du ins Baumhaus. Jetzt erstmal eine Line Keta zur Belohnung. Musik und Lichter werden intensiver... alles dreht sich... du merkst, dass du wegtrittst...",
+    "choices": [
+    {
+    "text": "Versuch wach zu bleiben.",
+    "action": "k_hole"
+    },
+    {
+    "text": "Lass es dich ueberkommen.",
+    "action": "k_hole"
+    }
+    ]
+    },
+    "k_hole": {
+    "text": "Die Bahn war viel zu gross. Keine Chance, aufzustehen, jetzt ist K-Hole angesagt. Du merkst, wie du auf eine Kutsche geladen wirst. Retourkutsche...",
+    "choices": [
+    {
+    "text": "Wo... Wo bin ich?! Ah, das ist doch der Psycare.",
+    "action": "teleport_psycare"
+    }
+    ]
     },
     "coffee_stand": {
-      "text": "The coffee stand beckons with the rich aroma of premium beans. The barista looks up expectantly.",
-      "choices": [
-        {
-          "text": "Order coffee for yourself",
-          "condition": "!watto_wants_coffee",
-          "action": "drink_coffee_simple"
-        },
-        {
-          "text": "Get coffee for Watto and yourself",
-          "condition": "watto_wants_coffee_and_acid_mode",
-          "action": "drink_coffee_watto"
-        },
-        {
-          "text": "Just browsing",
-          "action": "close"
-        }
-      ]
+    "text": "Turbo Kaffee mit den besten Bohnen, geile Roestaromen. Der Barista schaut dich erwartend an.",
+    "choices": [
+    {
+    "text": "Einen Kaffe, Herr Ober.",
+    "condition": "!watto_wants_coffee",
+    "action": "drink_coffee_simple"
+    },
+    {
+    "text": "Einen Kaffe fuer mich und die Weltraumfliege bitte.",
+    "condition": "watto_wants_coffee_and_acid_mode",
+    "action": "drink_coffee_watto"
+    },
+    {
+    "text": "Danke, nein - Bin eher der Pepp-Typ.",
+    "action": "close"
     }
-  }
-} 
+    ]
+    },
+    "drink_coffee_simple": {
+    "text": "Der Kaffee ist heiß und stark, weckt dich auf wie ein Bassdrop. Du fuehlst dich energiegeladen, bereit fuer die naechsten Floors.",
+    "choices": [
+    {
+    "text": "Weiter im Beat.",
+    "action": "close"
+    }
+    ]
+    },
+    "drink_coffee_watto": {
+    "text": "Du nimmst zwei Kaffee, einer fuer dich, einer fuer die Fliege. Der Duft mischt sich mit House-Beats – perfekt fuer eine intergalaktische Mission.",
+    "choices": [
+    {
+    "text": "Zurueck zur Fliege.",
+    "action": "close"
+    }
+    ]
+    }
+    }
+    }
