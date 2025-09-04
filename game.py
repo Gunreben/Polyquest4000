@@ -524,6 +524,9 @@ class TarmacGame:
         elif action == "sleep_well":
             # Transition to sleep well dialogue at Nest
             self.switch_dialogue_state("Nest", "sleep_well")
+        elif action == "drink_schlacke":
+            # Transition to drink schlacke dialogue at Nest
+            self.switch_dialogue_state("Nest", "drink_schlacke")
         elif action == "give_knowledge":
             # Transition to give knowledge dialogue at Workshopspace
             self.switch_dialogue_state("Workshopspace", "give_knowledge")

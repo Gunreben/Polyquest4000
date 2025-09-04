@@ -114,7 +114,7 @@
     ]
     },
     "petrol_pump_watto": {
-    "text": "In deiner ACID-Optik sieht die Fliege aus, wie Watto von Star Wars. Immernoch mega widerlich.",
+    "text": "Eine fette Fliege, die auf der Zapsaeule sitzt, sieht in deiner ACID-Optik sieht aus wie Watto von Star Wars. Mega widerlich... Aber sie kann sprechen.",
     "choices": [
     {
     "text": "Hier hast du deinen Kaffee.",
@@ -349,6 +349,10 @@
     {
     "text": "Kuschel dich ins warme Nestbettchen.",
     "action": "sleep_well"
+    },
+    {
+    "text": "Schlacke trinken.",
+    "action": "drink_schlacke"
     }
     ]
     },
@@ -358,6 +362,15 @@
     {
     "text": "Aufstehen und abenteuern.",
     "action": "close"
+    }
+    ]
+    },
+    "drink_schlacke": {
+    "text": "Brav mischst du deine Brause mit dem Underberg. Dein ganzer Bauchi sprudelt, verzweifelt rülpst du dreimal und spürst, wie dich das Zeug komplett wegballert...",
+    "choices": [
+    {
+    "text": "Wo bin ich denn jetzt schon wieder??? Ah, Psycare...",
+    "action": "teleport_psycare"
     }
     ]
     }
@@ -388,7 +401,7 @@
     },
     "2. Reihe": {
     "initial": {
-    "text": "2. Reihe - Coffee and House music. The aroma of freshly brewed coffee mixes with pulsing beats. What draws you in?",
+    "text": "2. Reihe - Endlich Housemusik. Bin ich jetzt hinter oder vor dem DJ?",
     "choices": [
     {
     "text": "Oh nice, lass mal ins Baumhaus klettern.",
