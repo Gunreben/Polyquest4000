@@ -2,7 +2,6 @@
     "Polytron4000": {
     "initial": {
     "text": "Du siehst ein paar schrottige Roboter, die darauf Warten, dass das Polytron4000 abheben kann. Wo bleibt der Hyperraumantrieb?",
-    "text_en": "The mighty Polytron 4000 stands before you, humming with potential energy. Ancient alien technology awaits activation...",
     "choices": [
     {
     "text": "Hyperraumantrieb in den Hyperraum-Antriebsschlitz stecken.",
@@ -44,10 +43,10 @@
     ]
     },
     "open_beer": {
-    "text": "Das Bier zischt auf und sprudelt ueber die Steckdose. Funken fliegen, und ploetzlich flackern die Lichter. Du fuehlst einen leichten Schock, aber hey, das Bier schmeckt jetzt elektrisierend!",
+    "text": "Das Bier zischt auf und sprudelt ueber die Steckdose. Funken fliegen, und ploetzlich flackern die Lichter. Um dich wird es dunkel.",
     "choices": [
     {
-    "text": "Weitertrinken und abwarten, was passiert.",
+    "text": "Schnell weiter, bevor jemand merkt, dass wir das waren.",
     "action": "close"
     }
     ]
@@ -142,7 +141,7 @@
     ]
     },
     "watto_quest": {
-    "text": "Du nickst der Fliege zu und spuerst, wie die Quest in deinem Kopf pulsiert. Zeit, diesen Kaffee zu besorgen – die Galaxis haengt davon ab!",
+    "text": "Du nickst der Fliege zu und spuerst, wie die Quest in deinem Kopf pulsiert. Zeit, diesen Kaffee zu besorgen - die Galaxis haengt davon ab!",
     "choices": [
     {
     "text": "Ab zur Kaffeestand.",
@@ -160,7 +159,7 @@
     ]
     },
     "give_hyperraumantrieb": {
-    "text": "Der Hyperraumantrieb glaenzt in deiner Hand, vibrierend mit kosmischer Energie. Du fuehlst dich wie ein Held aus einem Sci-Fi-Film – nur mit mehr Festival-Schweiß.",
+    "text": "Der Hyperraumantrieb glaenzt in deiner Hand, vibrierend mit kosmischer Energie. Du fuehlst dich wie ein Held aus einem Sci-Fi-Film - nur mit mehr Festival-Schweiß.",
     "choices": [
     {
     "text": "Schnell zurueck zum Polytron!",
@@ -184,7 +183,7 @@
     ]
     },
     "give_energy": {
-    "text": "Du betrittst die Sauna, Dampf umhuellt dich wie ein warmer Trip. Deine Energie laedt sich auf, und du fuehlst dich bereit fuer das naechste Abenteuer – oder einen Nackttanz.",
+    "text": "Du betrittst die Sauna, Dampf umhuellt dich wie ein warmer Trip. Deine Energie laedt sich auf, und du fuehlst dich bereit fuer das naechste Abenteuer - oder einen Nackttanz.",
     "choices": [
     {
     "text": "Frisch erholt weiterziehen.",
@@ -208,10 +207,10 @@
     ]
     },
     "give_info": {
-    "text": "Du setzt dich hin und knackst ein paar Matheaufgaben. Ploetzlich ergibt alles Sinn – oder ist das der Festival-Vibe? Du lernst, dass der Hyperraumantrieb vielleicht in den Sternen liegt.",
+    "text": "Du setzt dich hin und knackst ein paar Matheaufgaben. Ploetzlich ergibt alles Sinn - Nur Fliegen können bei Hyper-Hyperraumantrieben helfen.",
     "choices": [
     {
-    "text": "Klug geworden, ab zur naechsten Stage.",
+    "text": "Woooo gibts hier Fliegen... Auf ACID sollte man die eigentlich finden können.",
     "action": "close"
     }
     ]
@@ -245,7 +244,7 @@
     ]
     },
     "activate_acid_mode": {
-    "text": "Das Papier loest sich auf deiner Zunge auf, und ploetzlich explodieren die Farben um dich herum. Die Welt wird zu einem wirbelnden Kaleidoskop – willkommen im Acid-Mode, Kumpel!",
+    "text": "Das Papier loest sich auf deiner Zunge auf, und ploetzlich explodieren die Farben um dich herum. Die Welt wird zu einem wirbelnden Kaleidoskop - willkommen im Acid-Mode, Kumpel!",
     "choices": [
     {
     "text": "Trippig weiterforschen.",
@@ -291,7 +290,7 @@
     ]
     },
     "dino_bong_pre_teleport": {
-    "text": "Du nimmst einen tiefen Zug vom Dino-Bong, und der Rauch fuellt deine Lungen mit praehistorischem Feuer. Die Beats werden lauter, dein Kopf dreht sich – ploetzlich siehst du Dinos tanzen, und alles wird blurry... Zeit fuer Psycare?",
+    "text": "Du nimmst einen tiefen Zug vom Dino-Bong, und der Rauch fuellt deine Lungen mit praehistorischem Feuer. Die Beats werden lauter, dein Kopf dreht sich - ploetzlich siehst du Dinos tanzen, und alles wird blurry... Zeit fuer Psycare?",
     "choices": [
     {
     "text": "Lass es dich wegbeamen.",
@@ -318,13 +317,13 @@
     "action": "rhubarb_schnaps_pre_teleport"
     },
     {
-    "text": "Schaf reiten.",
+    "text": "Lieber auf weiter und mal sehen, ob wir vielleicht am Psycare vorbeikommen.",
     "action": "close"
     }
     ]
     },
     "rhubarb_schnaps_pre_teleport": {
-    "text": "Du kippst den Rhabarberschnaps runter, und er brennt wie fluessiges Feuer in deiner Kehle. Die Schafe beginnen zu fliegen, die Musik wird zu einem Wirbelsturm – dein Magen rebelliert, und du spuerst den Teleport kommen...",
+    "text": "Du kippst den Rhabarberschnaps runter, und er brennt wie fluessiges Feuer in deiner Kehle. Die Schafe beginnen zu fliegen, die Musik wird zu einem Wirbelsturm - dein Magen rebelliert, und du spuerst den Teleport kommen...",
     "choices": [
     {
     "text": "Ab in die Psycare!",
@@ -377,20 +376,20 @@
     },
     "Workshopspace": {
     "initial": {
-    "text": "Workshopspace - Learn, create, and collaborate. Knowledge is power here.",
+    "text": "Einige Menschen Basteln hier und Basteln da.",
     "choices": [
     {
-    "text": "Learn something new",
-    "action": "give_knowledge"
+    "text": "Lass versuchen, einen Hyper-Hyperraumantrieb zu basteln!",
+    "action": "bau_hyperraumantrieb"
     },
     {
-    "text": "Not in learning mood",
+    "text": "Kein Bock auf Basteln.",
     "action": "close"
     }
     ]
     },
     "give_knowledge": {
-    "text": "Du tauchst in einen Workshop ein, bastelst und lernst. Ploetzlich klickt es – du weißt jetzt, wie man einen improvisierten Hyperantrieb baut. Oder war das nur der Kreativitaetsboost?",
+    "text": "Du tauchst in einen Workshop ein, bastelst und lernst. Ploetzlich klickt es - du weißt jetzt, wie man einen improvisierten Hyperantrieb baut. Du brauchst nurnoch eine?",
     "choices": [
     {
     "text": "Mit neuem Wissen weiter.",
@@ -464,7 +463,7 @@
     ]
     },
     "drink_coffee_watto": {
-    "text": "Du nimmst zwei Kaffee, einer fuer dich, einer fuer die Fliege. Der Duft mischt sich mit House-Beats – perfekt fuer eine intergalaktische Mission.",
+    "text": "Du nimmst zwei Kaffee, einer fuer dich, einer fuer die Fliege. Der Duft mischt sich mit House-Beats - perfekt fuer eine intergalaktische Mission.",
     "choices": [
     {
     "text": "Zurueck zur Fliege.",

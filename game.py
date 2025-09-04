@@ -13,8 +13,8 @@ class TarmacGame:
         pygame.init()
         
         # Screen setup - CRT terminal feel
-        self.width = 1024
-        self.height = 768
+        self.width = 1280
+        self.height = 720
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Tarmac Festival - Polytron 4000")
         
@@ -50,7 +50,7 @@ class TarmacGame:
         self.acid_mode = False
         
         # Font
-        self.font = pygame.font.Font(None, 24)
+        self.font = pygame.font.Font(None, 32)  # Increased from 24 to 32
         self.title_font = pygame.font.Font(None, 36)
         
         # Game state
@@ -107,6 +107,7 @@ class TarmacGame:
         self.pois = []
         self.walkable_areas = []
         self.zugang_areas = []  # New: Zugang areas (class 98)
+        self.hidden_pois = set()  # Track POIs that should be hidden from map
         
         # POI interaction control
         self.last_poi_visited = None  # Track which POI was last visited
@@ -359,19 +360,20 @@ class TarmacGame:
         if is_on_weg:
             self.has_been_on_weg = True
         
-        # Check POI interactions (can interact directly with POIs)
+        # Check POI interactions (can interact directly with POIs, skip hidden ones)
         if not self.dialogue_active:
             for poi in self.pois:
-                poi_rect = pygame.Rect(poi['x'], poi['y'], poi['width'], poi['height'])
-                if player_rect.colliderect(poi_rect):
-                    # Allow interaction if:
-                    # 1. This is a new POI, OR
-                    # 2. Player has been on Weg since last visiting this POI
-                    if (self.last_poi_visited != poi['name'] or self.has_been_on_weg):
-                        self.start_dialogue(poi['name'])
-                        self.last_poi_visited = poi['name']
-                        self.has_been_on_weg = False  # Reset until player goes to Weg again
-                    break
+                if poi['name'] not in self.hidden_pois:  # Only check collision if not hidden
+                    poi_rect = pygame.Rect(poi['x'], poi['y'], poi['width'], poi['height'])
+                    if player_rect.colliderect(poi_rect):
+                        # Allow interaction if:
+                        # 1. This is a new POI, OR
+                        # 2. Player has been on Weg since last visiting this POI
+                        if (self.last_poi_visited != poi['name'] or self.has_been_on_weg):
+                            self.start_dialogue(poi['name'])
+                            self.last_poi_visited = poi['name']
+                            self.has_been_on_weg = False  # Reset until player goes to Weg again
+                        break
     
     def start_dialogue(self, poi_name):
         """Start dialogue with a POI"""
@@ -384,7 +386,7 @@ class TarmacGame:
                 self.current_dialogue = {
                     "text": "HILFE!!! Das POLYTRON4000 muss zum Parallelwelt-TAMRAC. POLYTRON4000 braucht Hyper-Hyperraumantrieb. ",
                     "choices": [
-                        {"text": "LET'S GO - Hyper-Hyperraumantrieb finden.", "action": "close"},
+                        {"text": "LET'S GO!!! (Klicke Oben/Unten aufs Touchpad)", "action": "close"},
                     ]
                 }
                 self.is_first_interaction = False
@@ -486,7 +488,7 @@ class TarmacGame:
             self.switch_dialogue_state("L300", "oracle_wisdom")
         elif action == "watto_completion_dialogue":
             # Transition to Watto completion dialogue
-            self.switch_dialogue_state("Resonant", "watto_completion")
+            self.switch_dialogue_state("Resonant", "watto_completion_dialogue")
         elif action == "give_hyperraumantrieb":
             # Watto gives the Hyperraumantrieb
             self.inventory.add("hyperraumantrieb")
@@ -500,6 +502,9 @@ class TarmacGame:
         elif action == "open_beer":
             # Transition to open beer dialogue
             self.switch_dialogue_state("Brausecus", "open_beer")
+            # Hide Brausecus from the map after spilling beer
+            self.hidden_pois.add("Brausecus")
+            print("💥 The lights go out at Brausecus! The stage disappears into darkness...")
         elif action == "petrol_pump_fly":
             # Transition to petrol pump fly dialogue
             self.switch_dialogue_state("Resonant", "petrol_pump_fly")
@@ -657,57 +662,60 @@ class TarmacGame:
         overlay.fill(self.BLACK)
         self.screen.blit(overlay, (0, 0))
         
-        # Dialogue box
+        # Dialogue box (dynamic height based on text + choices)
         box_width = 600
-        box_height = 200
-        box_x = (self.width - box_width) // 2
-        box_y = (self.height - box_height) // 2
-        
-        pygame.draw.rect(self.screen, self.BLACK, (box_x, box_y, box_width, box_height))
-        pygame.draw.rect(self.screen, self.current_colors['PRIMARY'], (box_x, box_y, box_width, box_height), 2)
-        
+        line_height_text = self.font.get_linesize()
+
         # Dialogue text
         text = self.current_dialogue.get('text', '')
+        text_lines = self.wrap_text(text, box_width - 40)
+
+        # Estimate choices height using wrapped lines
+        line_height_choice = max(28, line_height_text)  # ensure readable spacing
+        choices = visible_choices if 'choices' in self.current_dialogue else []
+        total_choice_height = 0
+        for i, choice in enumerate(choices):
+            choice_text = f"{'>' if i == self.selected_choice else ' '} {choice['text']}"
+            wrapped = self.wrap_text(choice_text, box_width - 40)
+            total_choice_height += len(wrapped) * line_height_choice + 10
+
+        # Compute dynamic box height with padding
+        box_height = 20 + len(text_lines) * line_height_text + 20 + total_choice_height + 20
+        box_height = max(220, min(int(self.height * 0.8), box_height))
+
+        # Position box
+        box_x = (self.width - box_width) // 2
+        box_y = (self.height - box_height) // 2
+
+        pygame.draw.rect(self.screen, self.BLACK, (box_x, box_y, box_width, box_height))
+        pygame.draw.rect(self.screen, self.current_colors['PRIMARY'], (box_x, box_y, box_width, box_height), 2)
+
+        # Render dialogue text
         y_offset = box_y + 20
-        
-        # Word wrap
-        words = text.split(' ')
-        lines = []
-        current_line = []
-        
-        for word in words:
-            test_line = ' '.join(current_line + [word])
-            if self.font.size(test_line)[0] < box_width - 40:
-                current_line.append(word)
-            else:
-                if current_line:
-                    lines.append(' '.join(current_line))
-                current_line = [word]
-        
-        if current_line:
-            lines.append(' '.join(current_line))
-        
-        for line in lines:
+        for line in text_lines:
             text_surface = self.font.render(line, True, self.current_colors['PRIMARY'])
             self.screen.blit(text_surface, (box_x + 20, y_offset))
-            y_offset += 25
+            y_offset += line_height_text
         
         # Choices
         self.dialogue_choice_rects = []  # Reset clickable areas
         
         if 'choices' in self.current_dialogue:
             choices = visible_choices  # Only show choices whose conditions are met
-            choice_y = box_y + box_height - 80
-            
+            choice_y = y_offset + 20
+            line_height = line_height_choice
+            current_y = choice_y
             for i, choice in enumerate(choices):
-                # Calculate choice rectangle for clicking
+                # Wrap choice text to fit in dialogue box
                 choice_text = f"{'>' if i == self.selected_choice else ' '} {choice['text']}"
-                text_surface = self.font.render(choice_text, True, self.current_colors['PRIMARY'])
-                text_width, text_height = text_surface.get_size()
+                wrapped_lines = self.wrap_text(choice_text, box_width - 40)
+                
+                # Calculate total height for this choice
+                choice_height = len(wrapped_lines) * line_height
                 
                 # Create clickable rectangle (with some padding)
-                choice_rect = pygame.Rect(box_x + 15, choice_y + i * 25 - 2, 
-                                        box_width - 30, text_height + 4)
+                choice_rect = pygame.Rect(box_x + 15, current_y - 2, 
+                                        box_width - 30, choice_height + 4)
                 self.dialogue_choice_rects.append(choice_rect)
                 
                 # Determine color based on selection, confirmation state, and hover
@@ -724,29 +732,30 @@ class TarmacGame:
                 else:
                     color = self.current_colors['DIM']
                 
-                # Draw choice text
-                choice_display_text = f"{'>' if i == self.selected_choice else ' '} {choice['text']}"
-                
-                # Add mouse instruction for hover
-                if i == self.hovered_choice:
-                    choice_display_text += " (click to select)"
-                # Add MIDI instructions for non-hovered choices (only if not hovering any choice)
-                elif self.hovered_choice == -1:
-                    if self.dialogue_state == "selecting":
-                        if i == 0:
-                            choice_display_text += " (tap upper half to select)"
-                        else:
-                            choice_display_text += " (tap lower half to select)"
-                    else:  # confirming
-                        if i == self.selected_choice:
-                            choice_display_text += " (tap same half to confirm)"
-                
-                text_surface = self.font.render(choice_display_text, True, color)
-                self.screen.blit(text_surface, (box_x + 20, choice_y + i * 25))
+                # Draw each line of the wrapped choice text
+                for line_idx, line in enumerate(wrapped_lines):
+                    # Add instructions only to the last line
+                    if line_idx == len(wrapped_lines) - 1:
+                        if i == self.hovered_choice:
+                            line += " (click to select)"
+                        elif self.hovered_choice == -1:
+                            if self.dialogue_state == "selecting":
+                                if i == 0:
+                                    line += ""
+                                else:
+                                    line += ""
+                            else:  # confirming
+                                if i == self.selected_choice:
+                                    line += " (tap same half to confirm)"
+                    
+                    text_surface = self.font.render(line, True, color)
+                    self.screen.blit(text_surface, (box_x + 20, current_y + line_idx * line_height))
                 
                 # Draw clickable area outline when hovering (debug visual)
                 if i == self.hovered_choice:
                     pygame.draw.rect(self.screen, self.current_colors['PRIMARY'], choice_rect, 1)
+                
+                current_y += choice_height + 10  # Add some space between choices
         
         # Draw MIDI debug info for dialogue (only if not hovering with mouse)
         if self.hovered_choice == -1:
@@ -773,19 +782,20 @@ class TarmacGame:
             pygame.draw.rect(self.screen, self.GREY, 
                            (area['x'], area['y'], area['width'], area['height']), 1)
         
-        # Draw POIs
+        # Draw POIs (skip hidden ones)
         for poi in self.pois:
-            color = self.current_colors['BRIGHT'] if poi['name'] == 'Polytron4000' else self.current_colors['PRIMARY']
-            pygame.draw.rect(self.screen, color, 
-                           (poi['x'], poi['y'], poi['width'], poi['height']), 2)
-            
-            # POI label centered in the rectangle
-            text_surface = self.font.render(poi['name'], True, color)
-            text_rect = text_surface.get_rect()
-            # Center the text in the POI rectangle
-            text_x = poi['x'] + (poi['width'] - text_rect.width) // 2
-            text_y = poi['y'] + (poi['height'] - text_rect.height) // 2
-            self.screen.blit(text_surface, (text_x, text_y))
+            if poi['name'] not in self.hidden_pois:  # Only draw if not hidden
+                color = self.current_colors['BRIGHT'] if poi['name'] == 'Polytron4000' else self.current_colors['PRIMARY']
+                pygame.draw.rect(self.screen, color, 
+                               (poi['x'], poi['y'], poi['width'], poi['height']), 2)
+                
+                # POI label centered in the rectangle
+                text_surface = self.font.render(poi['name'], True, color)
+                text_rect = text_surface.get_rect()
+                # Center the text in the POI rectangle
+                text_x = poi['x'] + (poi['width'] - text_rect.width) // 2
+                text_y = poi['y'] + (poi['height'] - text_rect.height) // 2
+                self.screen.blit(text_surface, (text_x, text_y))
         
         # Draw player
         pygame.draw.circle(self.screen, self.current_colors['BRIGHT'], 
@@ -959,7 +969,7 @@ class TarmacGame:
             return condition in self.quest_flags
 
     # ---------------------------------------------------------------------
-    # Helper for dialogue choice visibility
+    # Helper for dialogue choice visibility and text wrapping
     # ---------------------------------------------------------------------
     def get_visible_choices(self):
         """Return list of choices whose conditions are currently met."""
@@ -972,6 +982,26 @@ class TarmacGame:
             if 'condition' not in choice or self.check_condition(choice['condition']):
                 visible.append(choice)
         return visible
+    
+    def wrap_text(self, text, max_width):
+        """Wrap text to fit within max_width pixels."""
+        words = text.split(' ')
+        lines = []
+        current_line = []
+        
+        for word in words:
+            test_line = ' '.join(current_line + [word])
+            if self.font.size(test_line)[0] < max_width:
+                current_line.append(word)
+            else:
+                if current_line:
+                    lines.append(' '.join(current_line))
+                current_line = [word]
+        
+        if current_line:
+            lines.append(' '.join(current_line))
+        
+        return lines
 
     def draw_win_screen(self):
         """Draw the victory screen with animations"""
@@ -1095,6 +1125,7 @@ class TarmacGame:
         # Reset inventory and flags
         self.inventory = set()
         self.quest_flags = set()
+        self.hidden_pois = set()  # Reset hidden POIs
         
         # Reset POI interaction tracking
         self.last_poi_visited = None
