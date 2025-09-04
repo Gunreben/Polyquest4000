@@ -109,6 +109,12 @@ class TarmacGame:
         self.zugang_areas = []  # New: Zugang areas (class 98)
         self.hidden_pois = set()  # Track POIs that should be hidden from map
         
+        # Echo trail system (for dino-bong effect)
+        self.echo_trail_active = False
+        self.echo_trail = []  # List of (x, y, timestamp) tuples
+        self.max_trail_length = 15  # Maximum number of echo positions
+        self.trail_fade_time = 2.0  # Time in seconds for trail to fade
+        
         # POI interaction control
         self.last_poi_visited = None  # Track which POI was last visited
         self.has_been_on_weg = True   # Track if player has been on Weg since last POI
@@ -521,8 +527,11 @@ class TarmacGame:
             # Transition to dino bong dialogue at Orgia
             self.switch_dialogue_state("Orgia", "dino_bong_pre_teleport")
         elif action == "dino_bong":
-            # Transition to dino bong effect dialogue at Orgia
-            self.switch_dialogue_state("Orgia", "dino_bong")
+            # Activate echo trail effect instead of teleporting
+            self.echo_trail_active = True
+            self.echo_trail = []  # Clear any existing trail
+            print("🦕💨 The dino-bong hit creates a psychedelic echo trail behind you!")
+            self.dialogue_active = False
         elif action == "rhubarb_schnaps_pre_teleport":
             # Transition to rhubarb schnaps dialogue at Lila Drache
             self.switch_dialogue_state("Lila Drache", "rhubarb_schnaps_pre_teleport")
@@ -571,6 +580,56 @@ class TarmacGame:
             # Just drink coffee for yourself
             self.apply_speed_boost(4.5)  # 1.5x speed boost
             print("☕ Coffee consumed! You feel more energetic!")
+    
+    def update_echo_trail(self):
+        """Update the echo trail positions"""
+        if not self.echo_trail_active:
+            return
+        
+        current_time = time.time()
+        
+        # Add current player position to trail
+        self.echo_trail.append((self.player_x, self.player_y, current_time))
+        
+        # Remove old trail positions
+        self.echo_trail = [pos for pos in self.echo_trail 
+                          if current_time - pos[2] < self.trail_fade_time]
+        
+        # Limit trail length
+        if len(self.echo_trail) > self.max_trail_length:
+            self.echo_trail = self.echo_trail[-self.max_trail_length:]
+    
+    def draw_echo_trail(self):
+        """Draw the echo trail beneath the player"""
+        if not self.echo_trail_active or not self.echo_trail:
+            return
+        
+        current_time = time.time()
+        
+        for i, (x, y, timestamp) in enumerate(self.echo_trail[:-1]):  # Skip current position
+            # Calculate fade alpha based on age
+            age = current_time - timestamp
+            alpha = max(0, int(255 * (1 - age / self.trail_fade_time)))
+            
+            if alpha > 0:
+                # Create fading color (psychedelic trail)
+                if self.acid_mode:
+                    # Rainbow trail in acid mode
+                    hue = (i * 30 + current_time * 100) % 360
+                    color = self.hsv_to_rgb(hue, 0.8, 0.6)
+                else:
+                    # Green trail in normal mode
+                    color = (0, alpha, 0)
+                
+                # Draw trail circle (smaller than player)
+                trail_size = max(2, self.player_size - 3 - (i // 2))
+                pygame.draw.circle(self.screen, color, (int(x), int(y)), trail_size)
+    
+    def hsv_to_rgb(self, h, s, v):
+        """Convert HSV to RGB for rainbow trail effect"""
+        import colorsys
+        r, g, b = colorsys.hsv_to_rgb(h/360, s, v)
+        return (int(r*255), int(g*255), int(b*255))
     
     def update_psychedelic_effects(self):
         """Update psychedelic visual effects when in acid mode"""
@@ -645,6 +704,9 @@ class TarmacGame:
             
             # Always check collisions
             self.check_collisions()
+            
+            # Update echo trail
+            self.update_echo_trail()
     
     def draw_dialogue(self):
         """Draw dialogue interface"""
@@ -796,6 +858,9 @@ class TarmacGame:
                 text_x = poi['x'] + (poi['width'] - text_rect.width) // 2
                 text_y = poi['y'] + (poi['height'] - text_rect.height) // 2
                 self.screen.blit(text_surface, (text_x, text_y))
+        
+        # Draw echo trail (beneath player)
+        self.draw_echo_trail()
         
         # Draw player
         pygame.draw.circle(self.screen, self.current_colors['BRIGHT'], 
@@ -1126,6 +1191,10 @@ class TarmacGame:
         self.inventory = set()
         self.quest_flags = set()
         self.hidden_pois = set()  # Reset hidden POIs
+        
+        # Reset echo trail
+        self.echo_trail_active = False
+        self.echo_trail = []
         
         # Reset POI interaction tracking
         self.last_poi_visited = None

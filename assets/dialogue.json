@@ -207,10 +207,10 @@
     ]
     },
     "give_info": {
-    "text": "Du setzt dich hin und knackst ein paar Matheaufgaben. Ploetzlich ergibt alles Sinn - Nur Fliegen können bei Hyper-Hyperraumantrieben helfen.",
+    "text": "Du setzt dich hin und knackst ein paar Matheaufgaben. Ploetzlich ergibt alles Sinn - Nur Fliegen koennen bei Hyper-Hyperraumantrieben helfen.",
     "choices": [
     {
-    "text": "Woooo gibts hier Fliegen... Auf ACID sollte man die eigentlich finden können.",
+    "text": "Woooo gibts hier Fliegen... Auf ACID sollte man die eigentlich finden koennen.",
     "action": "close"
     }
     ]
@@ -290,20 +290,11 @@
     ]
     },
     "dino_bong_pre_teleport": {
-    "text": "Du nimmst einen tiefen Zug vom Dino-Bong, und der Rauch fuellt deine Lungen mit praehistorischem Feuer. Die Beats werden lauter, dein Kopf dreht sich - ploetzlich siehst du Dinos tanzen, und alles wird blurry... Zeit fuer Psycare?",
+    "text": "Fettttt, Dino-Bong - der Rauch fuellt deine Lungen mit praehistorischem Orgy-Feuer. Dinos tanzen, ha, hotdog, alles wird blurry... Dir waechst ein Dino-Schwanz!",
     "choices": [
     {
-    "text": "Lass es dich wegbeamen.",
+    "text": "Lass die Magie wirken und bewege dich!",
     "action": "dino_bong"
-    }
-    ]
-    },
-    "dino_bong": {
-    "text": "Der Bong-Hit haut dich um, und du beamst direkt in die Psycare. Ist das ein Lolli in deinem Mund?.",
-    "choices": [
-    {
-    "text": "Hab ich da eben Spongebob gesehen?",
-    "action": "teleport_psycare"
     }
     ]
     }
@@ -365,7 +356,7 @@
     ]
     },
     "drink_schlacke": {
-    "text": "Brav mischst du deine Brause mit dem Underberg. Dein ganzer Bauchi sprudelt, verzweifelt rülpst du dreimal und spürst, wie dich das Zeug komplett wegballert...",
+    "text": "Brav mischst du deine Brause mit dem Underberg. Dein ganzer Bauchi sprudelt, verzweifelt ruelpst du dreimal und spuerst, wie dich das Zeug komplett wegballert...",
     "choices": [
     {
     "text": "Wo bin ich denn jetzt schon wieder??? Ah, Psycare...",
