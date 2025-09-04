@@ -174,10 +174,10 @@
     "choices": [
     {
     "text": "Geil, hier gibts ne Sauna.",
-    "action": "give_energy"
+    "action": "feel_relaxed"
     },
     {
-    "text": "Geil ne Rutsche!",
+    "text": "Neeee, das sieht nicht nach Hyperraum aus.",
     "action": "close"
     }
     ]
@@ -190,6 +190,15 @@
     "action": "close"
     }
     ]
+    },
+    "feel_relaxed": {
+    "text": "Du fuehlst dich sehr entspannt und relaxed. Die warme Sauna-Atmosphaere hat dich komplett runtergekommen. Ploetzlich kommt dir ein Gedanke - jetzt waere der perfekte Moment, um den Hyper-Hyperraumantrieb zu finden!",
+    "choices": [
+    {
+    "text": "Auf zur Suche nach dem Hyper-Hyperraumantrieb!",
+    "action": "close"
+    }
+    ]
     }
     },
     "Looserlounge": {
@@ -198,7 +207,7 @@
     "choices": [
     {
     "text": "Och, neee, Mathehausaufgaben.",
-    "action": "give_info"
+    "action": "do_homework"
     },
     {
     "text": "Hah, ich bin doch kein Looser, schnell weiter.",
@@ -206,7 +215,7 @@
     }
     ]
     },
-    "give_info": {
+    "do_homework": {
     "text": "Du setzt dich hin und knackst ein paar Matheaufgaben. Ploetzlich ergibt alles Sinn - Nur Fliegen koennen bei Hyper-Hyperraumantrieben helfen.",
     "choices": [
     {
@@ -375,6 +384,15 @@
     },
     {
     "text": "Kein Bock auf Basteln.",
+    "action": "close"
+    }
+    ]
+    },
+    "bau_hyperraumantrieb": {
+    "text": "HAHA, das waere viel zu einfach. Als ob du einfach sowas bauen kannst.",
+    "choices": [
+    {
+    "text": "Nagut, dann muessen wir eben einen finden.",
     "action": "close"
     }
     ]

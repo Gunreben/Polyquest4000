@@ -520,9 +520,15 @@ class TarmacGame:
         elif action == "give_energy":
             # Transition to give energy dialogue at Vacanza
             self.switch_dialogue_state("Vacanza", "give_energy")
+        elif action == "feel_relaxed":
+            # Transition to feel relaxed dialogue at Vacanza
+            self.switch_dialogue_state("Vacanza", "feel_relaxed")
         elif action == "give_info":
             # Transition to give info dialogue at Looserlounge
             self.switch_dialogue_state("Looserlounge", "give_info")
+        elif action == "do_homework":
+            # Transition to do homework dialogue at Looserlounge
+            self.switch_dialogue_state("Looserlounge", "do_homework")
         elif action == "dino_bong_pre_teleport":
             # Transition to dino bong dialogue at Orgia
             self.switch_dialogue_state("Orgia", "dino_bong_pre_teleport")
@@ -541,6 +547,9 @@ class TarmacGame:
         elif action == "drink_schlacke":
             # Transition to drink schlacke dialogue at Nest
             self.switch_dialogue_state("Nest", "drink_schlacke")
+        elif action == "bau_hyperraumantrieb":
+            # Transition to bau hyperraumantrieb dialogue at Workshopspace
+            self.switch_dialogue_state("Workshopspace", "bau_hyperraumantrieb")
         elif action == "give_knowledge":
             # Transition to give knowledge dialogue at Workshopspace
             self.switch_dialogue_state("Workshopspace", "give_knowledge")
