@@ -120,6 +120,13 @@ class TarmacGame:
         self.has_been_on_weg = True   # Track if player has been on Weg since last POI
         self.is_first_interaction = True  # Track if this is the first Polytron4000 interaction
         
+        # Idle timeout system
+        self.last_activity_time = time.time()  # Track last user activity
+        self.idle_timeout = 30  # 30 seconds before showing countdown
+        self.countdown_duration = 10  # 30 seconds countdown
+        self.idle_state = "active"  # Can be "active", "countdown", or "restarting"
+        self.countdown_start_time = 0  # When countdown started
+        
         # POI type mapping - updated for new map
         self.poi_types = {
             0: "Polytron4000",    # Main goal: Old interstellar radio station / space ship
@@ -237,6 +244,8 @@ class TarmacGame:
             # Process all pending MIDI messages
             for msg in self.midi_port.iter_pending():
                 if msg.type == 'control_change':
+                    # Reset idle timer on any MIDI input
+                    self.reset_idle_timer()
                     if msg.control == 12:  # X-axis control
                         self.midi_x = msg.value
                         self.last_midi_time = current_time
@@ -284,6 +293,43 @@ class TarmacGame:
             
         except Exception as e:
             print(f"MIDI error: {e}")
+    
+    def reset_idle_timer(self):
+        """Reset the idle timer when user activity is detected"""
+        self.last_activity_time = time.time()
+        if self.idle_state != "active":
+            self.idle_state = "active"
+            print("🎮 User activity detected - idle timer reset")
+    
+    def update_idle_detection(self):
+        """Update idle detection and countdown logic"""
+        current_time = time.time()
+        time_since_activity = current_time - self.last_activity_time
+        
+        if self.idle_state == "active":
+            # Check if we should start countdown
+            if time_since_activity >= self.idle_timeout:
+                self.idle_state = "countdown"
+                self.countdown_start_time = current_time
+                print("⏰ Starting idle countdown...")
+        
+        elif self.idle_state == "countdown":
+            # Check if countdown is over
+            countdown_elapsed = current_time - self.countdown_start_time
+            if countdown_elapsed >= self.countdown_duration:
+                self.idle_state = "restarting"
+                print("🔄 Idle timeout reached - restarting game...")
+                self.restart_game()
+    
+    def get_countdown_remaining(self):
+        """Get remaining countdown seconds"""
+        if self.idle_state != "countdown":
+            return 0
+        
+        current_time = time.time()
+        countdown_elapsed = current_time - self.countdown_start_time
+        remaining = max(0, self.countdown_duration - countdown_elapsed)
+        return int(remaining)
     
     def set_target_position(self, x, y):
         """Set target position for click-to-move"""
@@ -666,6 +712,9 @@ class TarmacGame:
         """Main game update loop"""
         self.handle_midi()
         
+        # Update idle detection
+        self.update_idle_detection()
+        
         # Update psychedelic effects if in acid mode
         self.update_psychedelic_effects()
         
@@ -932,6 +981,9 @@ class TarmacGame:
         title_rect = title_surface.get_rect(center=(self.width//2, 30))
         self.screen.blit(title_surface, title_rect)
         
+        # Draw idle countdown on top of everything (except win screen)
+        self.draw_idle_countdown()
+        
         # Draw win screen on top of everything
         self.draw_win_screen()
         
@@ -955,6 +1007,8 @@ class TarmacGame:
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
+                    # Reset idle timer on any key press
+                    self.reset_idle_timer()
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
                     elif event.key == pygame.K_d:
@@ -968,6 +1022,8 @@ class TarmacGame:
                         # Restart game when won
                         self.restart_game()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # Reset idle timer on mouse click
+                    self.reset_idle_timer()
                     # Handle mouse click
                     if event.button == 1:  # Left click
                         click_x, click_y = event.pos
@@ -1076,6 +1132,63 @@ class TarmacGame:
             lines.append(' '.join(current_line))
         
         return lines
+
+    def draw_idle_countdown(self):
+        """Draw the idle countdown overlay"""
+        if self.idle_state != "countdown":
+            return
+        
+        remaining = self.get_countdown_remaining()
+        if remaining <= 0:
+            return
+        
+        import math
+        
+        # Create semi-transparent overlay
+        overlay = pygame.Surface((self.width, self.height))
+        overlay.set_alpha(180)
+        overlay.fill(self.BLACK)
+        self.screen.blit(overlay, (0, 0))
+        
+        # Countdown box
+        box_width = 600
+        box_height = 200
+        box_x = (self.width - box_width) // 2
+        box_y = (self.height - box_height) // 2
+        
+        # Pulsing red border for urgency
+        pulse = abs(math.sin(time.time() * 4)) * 0.5 + 0.5  # Fast pulse
+        border_color = (
+            int(255 * pulse),
+            int(50 * pulse),
+            int(50 * pulse)
+        )
+        
+        pygame.draw.rect(self.screen, self.BLACK, (box_x, box_y, box_width, box_height))
+        pygame.draw.rect(self.screen, border_color, (box_x, box_y, box_width, box_height), 4)
+        
+        # Warning message
+        warning_text = "Hallo spielt hier jemand?"
+        warning_surface = self.title_font.render(warning_text, True, self.current_colors['BRIGHT'])
+        warning_rect = warning_surface.get_rect(center=(self.width//2, box_y + 60))
+        self.screen.blit(warning_surface, warning_rect)
+        
+        # Countdown text with pulsing effect
+        countdown_text = f"Neustart in {remaining} Sekunden"
+        countdown_color = (
+            int(255 * pulse),
+            int(100 * pulse),
+            int(100 * pulse)
+        )
+        countdown_surface = self.font.render(countdown_text, True, countdown_color)
+        countdown_rect = countdown_surface.get_rect(center=(self.width//2, box_y + 120))
+        self.screen.blit(countdown_surface, countdown_rect)
+        
+        # Instructions
+        instruction_text = "Bewege dich oder drücke eine Taste zum Abbrechen"
+        instruction_surface = self.font.render(instruction_text, True, self.current_colors['DIM'])
+        instruction_rect = instruction_surface.get_rect(center=(self.width//2, box_y + 160))
+        self.screen.blit(instruction_surface, instruction_rect)
 
     def draw_win_screen(self):
         """Draw the victory screen with animations"""
@@ -1209,6 +1322,11 @@ class TarmacGame:
         self.last_poi_visited = None
         self.has_been_on_weg = True
         self.is_first_interaction = True
+        
+        # Reset idle timer
+        self.last_activity_time = time.time()
+        self.idle_state = "active"
+        self.countdown_start_time = 0
         
         print("✨ Game restarted! Good luck, space traveler!")
 
